@@ -36,8 +36,8 @@ This plugin has the following features:
   information and from an image's meta-data. Automatic management of the
   description field can be switched on or off for each image separately.
 
-* Video support. NextGEN Enhancer can automatically detect video files
-  (matching the filename against a regular expression). For video files, it
+* Video support. NextGEN Enhancer can automatically detect video files by
+  matching the filename against a regular expression. For video files, it
   can import some properties (only width/height and mtime for now)
   from a separate XML file, and store those in the database. When viewing a
   gallery, video files can be viewed with your favorite flash player like JW
@@ -58,7 +58,8 @@ default. To make use of this feature, you should take the following steps:
 
 1. Check and set the default copyright message on the options page. This
    will be set on every image that is put under NextGEN Enhancer's control. Its
-   use is optional, but more on that under 4.
+   use is optional, but more on that under 4. It is in strftime() format,
+   so you can use placeholders that will be replaced by date/time information.
 2. Decide if you want to use this feature globally, for every image in every
    gallery. If you do, proceed with 3, otherwise, go to 7.
 3. Check the option named 'Automatically manage NextGEN's description field' on
