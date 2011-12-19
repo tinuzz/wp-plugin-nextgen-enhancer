@@ -43,7 +43,7 @@ This plugin has the following features:
   WP plugin, configuration of this feature is really easy.
 
 * Page pre- and suffixes. NextGEN Enhancer lets you create a WP page for
-  showin a gallery. NextGEN Enhancer lets you specify a prefix and a suffix,
+  showing a gallery. NextGEN Enhancer lets you specify a prefix and a suffix,
   that will be automatically added to the gallery page. This works nicely,
   for example when protecting your pages with Hidepost [2].
 
