@@ -763,7 +763,7 @@ EOF;
 
 				$warning = "Your NextGEN Enhancer table is empty, so you can safely go ahead.";
 				if ($this -> num_records > 0) {
-					$warning = "<strong>WARNING</strong>: You alread have ". $this -> num_records ." records in NextGEN Enhancer's table.
+					$warning = "<strong>WARNING</strong>: You already have ". $this -> num_records ." records in NextGEN Enhancer's table.
 					 	Pressing the 'prime' button below will reinitialize the table and reset captions and
 						copyright information. Be careful!";
 				}
@@ -993,6 +993,7 @@ EOT;
 				$swf2 = preg_replace ('~https?://[^/]+~', '', $swf2);
 				echo <<<EOT
 					<input type="text" size="60" name="nextgen_enhancer_options[video_player_href]" id="nextgen_enhancer_video_player_href" autocomplete="off" value="$val" /><br />
+					<br />
 					Please use the tag <code>{fileref}</code> in the URL, where you want the path to the video file to appear. NextGEN Enhancer will replace it with the correct path.
 					If you have the <a href="http://wordpress.org/extend/plugins/jw-player-plugin-for-wordpress/" target="_blank">JW Player for Wordpress plugin</a> installed (it
 					doesn't have to be activated), a good value would be:<br />
