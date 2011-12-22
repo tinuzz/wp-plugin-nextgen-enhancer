@@ -7,4 +7,12 @@ jQuery(document).ready(function($){
 		}
 		return false;
 	});
+
+	$("#global_description_button").click(function(e) {
+		if (confirm("This will recompile all your image/video descriptions. Are you sure?")) {
+			$("#global_description_form").submit();
+			return true;
+		}
+		return false;
+	});
 });

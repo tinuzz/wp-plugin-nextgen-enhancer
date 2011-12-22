@@ -774,6 +774,19 @@ EOF;
 				</p>
 			</form>
 			<hr />
+			<h3>Globally update descriptions</h3>
+			If you changed the template for your image descriptions, just enabled the automatic management
+			of the description field, or changed the 'extra height' setting, it may be necessary to update
+			the description of all items in all galleries at once. Press the button below to do this. Images
+		 	or videos for which NextGEN Enhancer is disabled (this means items for which no record is present
+			in NextGEN Enhancer's database table) will be left alone.<br /><br />
+			You can do this on a per-gallery basis via <i>Bulk actions</i> on a gallery management page.<br /><br />
+			<form method="post" action="admin-post.php" id="global_description_form">
+				<input type="hidden" name="action" value="global_description" />
+				<input class="button-secondary" type="submit" id="global_description_button" value="Globally update descriptions" />
+			</form>
+			<br />
+			<hr />
 			<h3>Prime database</h3>
 			NextGEN Enhancer assumes that NextGEN Gallery's <i>description</i> is used to describe the contents of
 		 	your pictures. NextGEN Enhancer calls this the <i>caption</i>. By pressing the button below, NextGEN Enhancer's
@@ -1063,6 +1076,7 @@ EOT;
 				// A handler for the 'Prime Database Table' button
 				// This is here, because admin-post.php first does do_action('admin_init'), which points here and we need
 				// to register the follow-up action
+				add_action ('admin_post_global_description', array (&$this, 'admin_post_global_description'));
 				add_action ('admin_post_prime_database', array (&$this, 'admin_post_prime_database'));
 				add_action ('admin_post_set_copyright', array (&$this, 'admin_post_set_copyright'));
 				add_action ('admin_post_import_video_meta', array (&$this, 'admin_post_import_video_meta'));
@@ -1071,9 +1085,35 @@ EOT;
 			function admin_menu ()
 			{
 				$page = add_options_page('NextGEN Enhancer Options', 'NextGEN Enhancer', 'manage_options', 'nextgen-enhancer-admin-menu', array (&$this, 'options_page_html'));
-				$this -> options_page = str_replace('admin_page_', '', $page);
+				$page = str_replace('admin_page_', '', $page);
 				$this -> options_page = str_replace('settings_page_', '', $page);
 				$this -> options_page_url = menu_page_url ($this -> options_page, false);
+			}
+
+			function admin_post_global_description ()
+			{
+				global $wpdb;
+				$this -> admin_menu ();
+				$_SESSION['nextgen_enhancer_errors'] = 0;
+				$i = 0;
+				$j = 0;
+
+				$sql = "SELECT pid FROM ". $this -> table_name . " ORDER BY pid";
+				$pids = $wpdb -> get_col ($sql);
+
+				foreach ($pids as $id) {
+					$i += $this -> update_description ($id);
+					$j++;
+				}
+				$_SESSION['nextgen_enhancer_status_msg'] = "Description changed for $i out of $j items.";
+
+				/*
+				var_dump ($_SESSION);
+				var_dump ($page_url);
+				var_dump ($this);
+				*/
+
+				header ("Location: ". $this -> options_page_url);
 			}
 
 			function admin_post_prime_database ()
@@ -1293,7 +1333,7 @@ EOT;
 				}
 
 				$sql = $wpdb -> prepare ("UPDATE ". $wpdb -> prefix . "ngg_pictures SET description = %s WHERE pid = %d", $desc, $pid);
-				$wpdb -> query ($sql);
+				return $wpdb -> query ($sql);
 
 			}
 
