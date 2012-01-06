@@ -127,16 +127,7 @@ The following has to be taken into account:
   - the actual video should then be named 'myvideo.mp4' and be located in the same
     directory
   - the meta-data XML should be named 'myvideo.mp4.xml'.
-* After importing, the filename without its image extension (in the example:
-  'myvideo.mp4') will be entered as the 'Alt & Title Text'. This is NextGEN
-  Gallery's default behaviour. This value should not be changed, because NextGEN
-  Enhancer's javascript will use this value to create the link to the video
-  file. If you change the Alt & Title Text, the link may become broken.
 * The format of the XML file is fixed for now. This should change in the future.
-* This feature only works if 'Automatic description management' is active, or you
-  had NextGEN Enhancer assemble the description by hand, as described under 8 above.
-  The reason is, that the description should start with the word 'Video'. NextGEN
-  Enhancer's javascript uses that to match the videos and change the links.
 * For Lightview, the description template for videos (see options page) should
   contain the tag {lightviewoptions} at the end. This tag will make sure that
   the description is formatted, so that Lightview knows the dimensions of the video.
