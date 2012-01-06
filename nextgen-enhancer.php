@@ -100,7 +100,9 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 
 				// Filter to replace the item counter in view/album-extend.php
 				add_filter ('ngg_show_album_content', array (&$this, 'ngg_show_album_content'), 20, 2);
-				//
+
+				add_filter ('ngg_create_gallery_link', array (&$this, 'ngg_create_gallery_link'), 10, 2);
+
 				// This hook is called upon activation of the plugin
 				register_activation_hook(__FILE__, array (&$this, 'nextgen_enhancer_install'));
 			}
@@ -229,6 +231,8 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				if (isset ($this -> options) && $this -> options ["support_video"] == "yes") {
 					wp_enqueue_script ('nextgen-video', plugins_url('nextgen-video.js', __FILE__));
 				}
+				wp_enqueue_script ('nextgen-tzzbox', plugins_url('tzzbox.js', __FILE__));
+				wp_enqueue_style  ('nextgen-tzzbox', plugins_url('tzzbox.css', __FILE__));
 			}
 
 			/**
@@ -430,13 +434,40 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 			 */
 			function ngg_show_album_content ($content, $id)
 			{
-				if (isset ($this -> options) && $this -> options ["support_video"] == "yes") {
+				if (isset ($this -> options ["support_video"]) && $this -> options ["support_video"] == "yes") {
 
 					return str_replace($this -> album_item_srcstrings, $this -> album_item_repstrings, $content)."\n". $jwplayer;
 				}
 				else {
 					return $content;
 				}
+			}
+
+			/**
+			 * Handler for 'ngg_create_gallery_link' filter.
+			 * This function checks if the filename of the link matches the video regexp (if available)
+			 * and if it does, replaces the link to point at the flash player, as specified in the
+			 * video_player_href option.
+			 */
+			function ngg_create_gallery_link ($link, $picture)
+			{
+				if (isset ($this -> options ["support_video"]) && $this -> options ["support_video"] == "yes") {
+
+					// Only work if we have a regexp available
+					if (isset ($this -> options ['video_regexp']) && ($re = $this -> options ['video_regexp']) != "") {
+
+						$n = @preg_match($re, $picture -> filename, $matches);
+						if ($n == 1) {
+
+							$path_parts = pathinfo( $link );
+							$fileref = $path_parts ['dirname'] . "/" . $path_parts ['filename'];
+							$player = htmlspecialchars ($this -> options ['video_player_href']);
+							$link = str_replace('{fileref}', $fileref, $player);
+
+						}
+					}
+				}
+				return $link;
 			}
 
 			/**
@@ -487,13 +518,10 @@ EOT;
 					 * jwplayer("jwcontainer").load(file);
 					 */
 
-				$js = <<<EOT
-					<script type='text/javascript'>
-						var ngg_gallery_path = '$path';
-						var ngg_video_player_href = '$player';
-					</script>
-EOT;
-				return $js . "\n" . $jwplayer . "\n" . $content;
+				$hdr = (strlen ($gallery -> galdesc) ? "<h3>". $gallery -> galdesc . "</h3>\n" : "");
+
+				return $hdr . $content;
+				//return $hdr . $js . $jwplayer . $content;
 
 			}
 
