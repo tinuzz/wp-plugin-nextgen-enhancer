@@ -150,6 +150,7 @@ The XML format is as follows:
 * Support other Lightbox clones than Lightview for videos
 * Support NextGEN Gallery's ImageBrowser for videos
 * See how video support works in a default NextGEN Gallery installation
+* Support HTML5 video in addition to Flash
 * Improve documentation
 
 == Links
