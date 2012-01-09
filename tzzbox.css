@@ -1,0 +1,99 @@
+#tzzbox_overlay {
+
+	/* must be initially hidden */
+	display:none;
+
+	/* place overlay on top of other elements */
+	z-index:10000;
+
+	/* styling */
+	background-color:#fff;
+
+	min-width:50px;
+	min-height:50px;
+	border:1px solid #666;
+
+	padding: 10px;
+
+	/* CSS3 styling for latest browsers */
+	/*
+	-moz-box-shadow:0 0 30px 5px #000;
+	-webkit-box-shadow: 0 0 30px #000;
+	*/
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+}
+
+#tzzbox_nav {
+	/* must be initially hidden */
+	display:none;
+	position: fixed;
+	background-color: #6D6D6D;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #D2D2D2;
+	padding: 5px 12px;
+	text-align: center;
+	/*min-width: 180px; */
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+}
+
+#tzzbox_nav img {
+	margin: 2px 2px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+#tzzbox_prevbutton {
+	border-left: 1px solid #222;
+	padding-left: 5px;
+}
+
+#tzzbox_nextbutton {
+	border-right: 1px solid #222;
+	padding-right: 5px;
+}
+
+/* close button positioned on upper right corner */
+/*
+.tzzbox_overlay .close {
+	background-image:url(close.png);
+	position:absolute;
+	right:-15px;
+	top:-15px;
+	cursor:pointer;
+	height:35px;
+	width:35px;
+}
+*/
+
+#tzzbox_details {
+	font-size:11px;
+	color:#7a7a7a;
+	/* padding-top: 5px; */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: normal;
+}
+
+#tzzbox_details h3 {
+	color:#7a7a7a;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:15px;
+	font-weight: 700;
+	line-height: normal ;
+	margin: 5px 0;
+}
+
+/* Clickable areas on left and right side of an object */
+#tzzbox_prev, #tzzbox_next {
+	width: 200px;
+	height: 200px;
+	/* border: 1px solid red; */
+	border: 0;
+	z-index:10001;
+	position: absolute;
+	vertical-align: middle;
+}
+
