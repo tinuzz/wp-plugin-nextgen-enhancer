@@ -165,6 +165,10 @@
 					else if (e.which == 37) {
 						Tzzbox.load_prev();
 					}
+					else if (e.which == 32) {
+						Tzzbox.toggle_slideshow();
+					}
+					return false;
 				});
 			}
 		},
