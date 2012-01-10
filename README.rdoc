@@ -47,6 +47,10 @@ This plugin has the following features:
   that will be automatically added to the gallery page. This works nicely,
   for example when protecting your pages with Hidepost [2].
 
+* Tzzbox overlay effect. NextGEN Enhancer comes with its own Lightbox
+  alternative. When enabled, the JavaScript Thumbnail effect setting of
+  NextGEN Gallery is overridden.
+
 === Retaining meta-data
 
 To turn this option on, check the option 'Retain EXIF data with exiftool' on
@@ -143,6 +147,20 @@ The XML format is as follows:
  </flv>
  </fileset>
 
+=== Tzzbox overlay effect ===
+
+NextGEN Enhancer comes with 'Tzzbox', a Lightbox-like effect, based on jQuery
+TOOLS [7] and written by the same author as NextGEN Enhancer. It was inspired
+by Lightview, but has far less features. Basically, it can only display images
+and Flash as of now, but at least support for HTML5 video is on the roadmap.
+
+The JavaScript for jQuery TOOLS 'Overlay', 'Expose' and 'Flashembed' is included
+in the library, so if you have these tools loaded by some other means in your
+Wordpress install, the tools might be loaded twice, which may cause problems.
+The only workaround at this moment, is to edit 'tzzbox.js', find the line that
+contains 'jQuery Tools v1.2.6 - The missing UI library for the Web', and delete
+everything from that line onward.
+
 == To do
 
 * Make video support in album view work in other languages than English
@@ -161,3 +179,4 @@ The XML format is as follows:
 [4] http://wordpress.org/extend/plugins/fv-wordpress-flowplayer/
 [5] http://wordpress.org/extend/plugins/lightview-plus/
 [6] http://code.google.com/p/nextgen-gallery/issues/detail?id=451
+[7] http://flowplayer.org/tools/
