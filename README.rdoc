@@ -1,0 +1,146 @@
+= NextGEN Enhancer Wordpress Plugin
+
+This is a Wordpress plugin, that enhances the functionality of
+NextGEN Gallery [1], a great photo gallery plugin for Wordpress.
+
+A warning up front: THIS PLUGIN IS NOT FOR EVERYBODY.
+
+It makes certain assumptions about how your content is organised,
+and it makes changes to your NextGEN Gallery database, although
+it is configurable in many ways, and is relatively safe to use.
+
+It was developed on a 'works for me' basis, initially to get rid
+of a growing collection of patches on NextGEN Gallery, that made
+upgrading a drag, over and over again. This is now over :-)
+
+[1] http://wordpress.org/extend/plugins/nextgen-gallery/
+
+== Features
+
+This plugin has the following features:
+
+* Retaining meta-data.
+  If you use NextGEN Gallery with GD for image manipulation, image meta-data
+  (EXIF) is lost after -for example- resizing. NextGEN Enhancer uses a perl
+  program named `exiftool' to save the meta-data to a file (XMP format), and
+  restore the data in the image file after manipulation. The XMP file can
+  optionally be kept for future reference.
+
+* Automatic management of image descriptions.
+  NextGEN Gallery provides a 'description' field for each image, in which you
+  can manually describe your image. NextGEN Enhancer introduces a way to
+  automatically manage the description field from various sources of information.
+  For this purpose, it creates its own database table, in which the actual
+  caption of image, as well as other information like copyrights are stored.
+  Using a template, the description of the image can be assembled from this
+  information and from an image's meta-data. Automatic management of the
+  description field can be switched on or off for each image separately.
+
+* Video support. NextGEN Enhancer can automatically detect video files
+  (matching the filename against a regular expression). For video files, it
+  can import some properties (only width/height and mtime for now)
+  from a separate XML file, and store those in the database. When viewing a
+  gallery, video files can be viewed with your favorite flash player like JW
+  Player or Flowplayer. If you have one of these players installed through a
+  WP plugin, configuration of this feature is really easy.
+
+=== Retaining meta-data
+
+To turn this option on, check the option 'Retain EXIF data with exiftool' on
+the options page. You will have to specify the path to `exiftool', too. The
+default path is <tt>/usr/bin/exiftool</tt>, which is suitable for Debian/Ubuntu
+if you have <tt>libimage-exiftool-perl</tt> installed.
+
+=== Automatic management of image descriptions
+
+This is the most complex feature of NextGEN Enhancer and it is turned off by
+default. To make use of this feature, you should take the following steps:
+
+1. Check and set the default copyright message on the options page. This
+   will be set on every image that is put under NextGEN Enhancer's control. Its
+   use is optional, but more on that under 4.
+2. Decide if you want to use this feature globally, for every image in every
+   gallery. If you do, proceed with 3, otherwise, go to 7.
+3. Check the option named 'Automatically manage NextGEN's description field' on
+   the options page.
+4. The options page provides two templates, one for images and one for videos.
+   Check if the template for images is to your liking. For example, if you don't
+   care about copyrights, remove it from the template.
+5. (Optional) Prime NextGEN Enhancer's database table with the button at the bottom
+   of the options page. This will create a record for every image in every one
+   of your galleries, set the copyright to what you specified before and copy the
+   'description' field from NextGEN Gallery's database to the 'caption' field of
+   NextGEN Enhancer. No changes are made to your NextGEN Gallery database.
+6. Globally update the descriptions of all images in your dabase. This WILL make
+   changes in your NextGEN Gallery database; that's why this is a separate step.
+   You can do this by clicking the 'Update all descriptions' button on the options
+   page (NOT IMPLEMENTED YET). A means of doing this on a per-gallery basis is
+   provided under 8.
+7. (Optional) When managing a gallery, there is a new checkbox in the rightmost
+   column named 'NextGEN Enhancer enabled'. If this is checked, it means a
+   record for that particular image is present in NextGEN Enhancer's table, and
+   automatic description management is available for that image. Using the
+   checkbox in the table header, you can (de)select all images at once. Save your
+   changes to add or remove images from NextGEN Enhancer's care.
+8. If you have automatic management enabled globally, NextGEN Enhancer will
+   update the description field of the image every time you save your changes.
+   If you chose to leave this feature disabled, you can select images by checking
+   their checkbox, and under 'Bulk actions', choose 'Update description with
+   NextGEN Enhancer'.
+
+=== Video support
+
+To turn this option on, check the 'Video support' checkbox on the options page.
+With this feature, NextGEN Enhancer will check the filename of each new image
+that is imported into NextGEN Gallery against a regular expression that you can
+provide. If the filename matches, the file is considered to be the preview
+image of a video file. This means a couple of things:
+
+* In the 'extended' album view, the number of images and videos is reported
+  separately, instead of just one number of items. WARNING: this currently
+  only works when your language is English, or any other language where the
+  album view displays the word 'Photos' with the number for each gallery.
+* For each matching file, the link for the thumbnail when viewing a gallery
+  will point at the .swf of a flash video player, that you can set using the
+  'HTML reference to Flash video player' option. This has been tested with
+  JW Player and Flowplayer, but only using Lightview to view the gallery, so this
+  may or may not work for you at all.
+* For matching files, an XML file is read for video meta-data. At this point,
+  only width and height are imported. This information can be used to instruct
+  your Lightview/Lightbox/Shadowbox viewer which size to open the video.
+
+The following has to be taken into account:
+
+* ONLY TESTED WITH LIGHTVIEW. OTHER LIGHTBOX CLONES ALMOST GUARANTEED NOT TO WORK.
+* Your filenames have to follow a certain convention:
+  - say, the preview image is named 'myvideo.mp4.jpg'
+  - the actual video should then be named 'myvideo.mp4' and be located in the same
+    directory
+  - the meta-data XML should be named 'myvideo.mp4.xml'.
+* The format of the XML file is fixed for now. This should change in the future.
+* This feature only works if 'Automatic description management' is active, or you
+  had NextGEN Enhancer assemble the description by hand, as described under 8 above.
+  The reason is, that the description should start with the word 'Video'. NextGEN
+  Enhancer's javascript uses that to match the videos and change the links.
+* For Lightview, the description template for videos (see options page) should
+  contain the tag {lightviewoptions} at the end. This tag will make sure that
+  the description is formatted, so that Lightview knows the dimensions of the video.
+
+The XML format is as follows:
+
+ <?xml version='1.0' encoding='UTF-8'?>
+ <fileset>
+ <flv>
+ <height>{HEIGHT}</height>
+ <width>{WIDTH}</width>
+ <mtime>{MTIME}</mtime>
+ </flv>
+ </fileset>
+
+== To do
+
+* Make video support in album view work in other languages than English
+* Make the format of the video metadata XML configurable
+* Support other Lightbox clones than Lightview for videos
+* See how video support works in a default NextGEN Gallery installation
+* Improve documentation
