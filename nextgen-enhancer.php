@@ -37,6 +37,8 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 
 			// Option defaults. More in the constructor
 			var $option_defaults = array (
+				"page_prefix"          => "",
+				"page_suffix"          => "",
 				"exiftool_path"        => "/usr/bin/exiftool",
 				"copy_exif"            => "yes",
 				"keep_xmlfile"         => "yes",
@@ -143,6 +145,9 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 
 				// Filter to run before adding a new image to the database
 				add_filter ('ngg_pre_add_new_image', array (&$this, 'ngg_pre_add_new_image'), 10, 2);
+
+				// Filter 'ngg_add_new_page' to modify new page content
+				add_action ('ngg_add_new_page', array (&$this, 'ngg_add_new_page'));
 			}
 
 			/**
@@ -784,6 +789,10 @@ EOF;
 			{
 				add_settings_field ('nextgen_enhancer_default_copyright','Default copyright',
 						array (&$this, 'default_copyright_html'), 'nextgen-enhancer', 'nextgen-enhancer-main');
+				add_settings_field ('nextgen_enhancer_page_prefix','Gallery page prefix',
+						array (&$this, 'page_prefix_html'), 'nextgen-enhancer', 'nextgen-enhancer-main');
+				add_settings_field ('nextgen_enhancer_page_suffix','Gallery page suffix',
+						array (&$this, 'page_suffix_html'), 'nextgen-enhancer', 'nextgen-enhancer-main');
 				add_settings_field ('nextgen_enhancer_copy_exif', 'Retain EXIF data with exiftool',
 						array (&$this, 'copy_exif_html'), 'nextgen-enhancer', 'nextgen-enhancer-main');
 				add_settings_field ('nextgen_enhancer_exiftool_path', 'Exiftool path',
@@ -818,6 +827,23 @@ EOF;
 					<input type="text" size="25" name="nextgen_enhancer_options[default_copyright]" id="nextgen_enhancer_default_copyright" value="$val" autocomplete="off" />
 EOT;
 			}
+
+			function page_prefix_html ()
+			{
+				$val = htmlspecialchars ($this -> options ['page_prefix']);
+				echo <<<EOT
+					<textarea rows="3" cols="60" name="nextgen_enhancer_options[page_prefix]" id="nextgen_enhancer_page_prefix" autocomplete="off">$val</textarea>
+EOT;
+			}
+
+			function page_suffix_html ()
+			{
+				$val = htmlspecialchars ($this -> options ['page_suffix']);
+				echo <<<EOT
+					<textarea rows="3" cols="60" name="nextgen_enhancer_options[page_suffix]" id="nextgen_enhancer_page_suffix" autocomplete="off">$val</textarea>
+EOT;
+			}
+
 			function exiftool_path_html ()
 			{
 				$val = $this -> options ['exiftool_path'];
@@ -827,6 +853,7 @@ EOT;
 					<input type="text" size="25" name="nextgen_enhancer_options[exiftool_path]" id="nextgen_enhancer_exiftool_path" value="$val" autocomplete="off" />
 EOT;
 			}
+
 			function copy_exif_html ()
 			{
 				$val = (isset ($this -> options ['copy_exif']) ? $this -> options ['copy_exif'] : "");
@@ -843,6 +870,7 @@ EOT;
 					Uncheck to disable retaining EXIF metadata in modified images.
 EOT;
 			}
+
 			function keep_xmlfile_html ()
 			{
 				$val = (isset ($this -> options ['keep_xmlfile']) ? $this -> options ['keep_xmlfile'] : "");
@@ -854,6 +882,7 @@ EOT;
 					better to keep this enabled.
 EOT;
 			}
+
 			function keep_xmpfile_html ()
 			{
 				$val = (isset ($this -> options ['keep_xmpfile']) ? $this -> options ['keep_xmpfile'] : "");
@@ -1355,6 +1384,13 @@ EOT;
 				}
 			}
 
+			function ngg_add_new_page ($page, $gid)
+			{
+				$pre = (isset ($this -> options ['page_prefix']) ? $this -> options ['page_prefix'] : "");
+				$suf = (isset ($this -> options ['page_suffix']) ? $this -> options ['page_suffix'] : "");
+				$page ['post_content'] = $pre . $page ['post_content'] . $suf;
+				return $page;
+			}
 
 		} // class
 	} // if !class_exists

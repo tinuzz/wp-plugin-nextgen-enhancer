@@ -13,8 +13,6 @@ It was developed on a 'works for me' basis, initially to get rid
 of a growing collection of patches on NextGEN Gallery, that made
 upgrading a drag, over and over again. This is now over :-)
 
-[1] http://wordpress.org/extend/plugins/nextgen-gallery/
-
 == Features
 
 This plugin has the following features:
@@ -43,6 +41,11 @@ This plugin has the following features:
   gallery, video files can be viewed with your favorite flash player like JW
   Player or Flowplayer. If you have one of these players installed through a
   WP plugin, configuration of this feature is really easy.
+
+* Page pre- and suffixes. NextGEN Enhancer lets you create a WP page for
+  showin a gallery. NextGEN Enhancer lets you specify a prefix and a suffix,
+  that will be automatically added to the gallery page. This works nicely,
+  for example when protecting your pages with Hidepost [2].
 
 === Retaining meta-data
 
@@ -104,8 +107,8 @@ image of a video file. This means a couple of things:
 * For each matching file, the link for the thumbnail when viewing a gallery
   will point at the .swf of a flash video player, that you can set using the
   'HTML reference to Flash video player' option. This has been tested with
-  JW Player and Flowplayer, but only using Lightview to view the gallery, so this
-  may or may not work for you at all.
+  JW Player [3] and Flowplayer [4], but only using Lightview to view the
+  gallery, so this may or may not work for you at all.
 * For matching files, an XML file is read for video meta-data. At this point,
   only width and height are imported. This information can be used to instruct
   your Lightview/Lightbox/Shadowbox viewer which size to open the video.
@@ -145,3 +148,10 @@ The XML format is as follows:
 * Support other Lightbox clones than Lightview for videos
 * See how video support works in a default NextGEN Gallery installation
 * Improve documentation
+
+== Links
+
+[1] http://wordpress.org/extend/plugins/nextgen-gallery/
+[2] http://wordpress.org/extend/plugins/hidepost/
+[3] http://wordpress.org/extend/plugins/jw-player-plugin-for-wordpress/
+[4] http://wordpress.org/extend/plugins/fv-wordpress-flowplayer/
