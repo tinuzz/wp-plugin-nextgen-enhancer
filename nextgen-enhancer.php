@@ -50,7 +50,8 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				"support_video"         => "",
 				"video_regexp"         => '/\.(mp4|flv)\.jpg$/i',
 				"video_player_href"    => "/lib/jwplayer/player.swf?file={fileref}&autostart=true&provider=http",
-				"video_extra_vheight"  => 0
+				"video_extra_vheight"  => 0,
+				"use_tzzbox"           => "",
 			);
 
 			/**
@@ -89,7 +90,7 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				// This action is called every time plugins get loaded
 				add_action ('plugins_loaded', array (&$this, 'plugins_loaded'));
 
-				// Load nextgen-video.js
+				// Load nextgen-tzzbox.js
 				add_action ('wp_print_scripts', array (&$this, 'load_scripts'));
 
 				// Filter to set up separate image and video counters for display in album view
@@ -101,7 +102,11 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				// Filter to replace the item counter in view/album-extend.php
 				add_filter ('ngg_show_album_content', array (&$this, 'ngg_show_album_content'), 20, 2);
 
+				// Filter to replace the link on videos, when video support is enabled
 				add_filter ('ngg_create_gallery_link', array (&$this, 'ngg_create_gallery_link'), 10, 2);
+
+				// Filter to replace the thumbnail effect code, when Tzzbox is enabled
+				add_filter ('ngg_get_thumbcode', array (&$this, 'ngg_get_thumbcode'), 10, 2);
 
 				// This hook is called upon activation of the plugin
 				register_activation_hook(__FILE__, array (&$this, 'nextgen_enhancer_install'));
@@ -228,11 +233,11 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 			 */
 			function load_scripts ()
 			{
-				if (isset ($this -> options) && $this -> options ["support_video"] == "yes") {
-					wp_enqueue_script ('nextgen-video', plugins_url('nextgen-video.js', __FILE__));
+				if (isset ($this -> options) && $this -> options ["use_tzzbox"] == "yes") {
+					wp_enqueue_script ('nextgen-tzzbox',      plugins_url('tzzbox.js', __FILE__));
+					wp_enqueue_script ('nextgen-tzzboxinit',  plugins_url('nextgen-tzzbox.js', __FILE__));
+					wp_enqueue_style  ('nextgen-tzzbox',      plugins_url('tzzbox.css', __FILE__));
 				}
-				wp_enqueue_script ('nextgen-tzzbox', plugins_url('tzzbox.js', __FILE__));
-				wp_enqueue_style  ('nextgen-tzzbox', plugins_url('tzzbox.css', __FILE__));
 			}
 
 			/**
@@ -470,6 +475,14 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				return $link;
 			}
 
+			function ngg_get_thumbcode ($thumbcode, $picture)
+			{
+				if (isset ($this -> options ["use_tzzbox"]) && $this -> options ["use_tzzbox"] == "yes") {
+					$thumbcode = 'class="tzzbox" rel="set[' . $picture -> name . ']"';
+				}
+				return $thumbcode;
+			}
+
 			/**
 			 * Handler for 'ngg_show_gallery_content'.
 			 */
@@ -536,18 +549,34 @@ EOT;
 				// Improve performance when video support is turned off
 				if (isset ($this -> options) && $this -> options ["support_video"] == "yes") {
 
-					//object(stdClass)#178 (15) { ["gid"]=> string(3) "206" ["name"]=> string(14) "219johan-wynke" ["slug"]=> string(22) "johan-wynkes-wedding-2" ["path"]=> string(33) "wp-content/gallery/219johan-wynke" ["title"]=> string(28) "Johan & Wynke's wedding" ["galdesc"]=> string(11) "12 May 2011" ["pageid"]=> string(3) "925" ["previewpic"]=> string(5) "13114" ["author"]=> string(1) "5" ["counter"]=> string(2) "25" ["imagecounter"]=> string(2) "23" ["videocounter"]=> string(1) "2" ["previewname"]=> string(16) "20110512_017.jpg" ["previewurl"]=> string(94) "http://test.grendelman.net/wp/wp-content/gallery/219johan-wynke/thumbs/thumbs_20110512_017.jpg" ["pagelink"]=> string(63) "http://test.grendelman.net/wp/photos-2011/johan-wynkes-wedding/" }
+					// Only work if we have a regexp available
+					if (isset ($this -> options ['video_regexp']) && ($re = $this -> options ['video_regexp']) != "") {
 
-					$sql_image = "SELECT COUNT(*) AS counter FROM ". $wpdb->prefix . "ngg_pictures WHERE galleryid ='$gallery->gid' AND exclude != 1 AND SUBSTRING(description, 1, 5) != 'Video'";
-					$sql_video = "SELECT COUNT(*) AS counter FROM ". $wpdb->prefix . "ngg_pictures WHERE galleryid ='$gallery->gid' AND exclude != 1 AND SUBSTRING(description, 1, 5) = 'Video'";
+						//object(stdClass)#178 (15) { ["gid"]=> string(3) "206" ["name"]=> string(14) "219johan-wynke" ["slug"]=> string(22) "johan-wynkes-wedding-2" ["path"]=> string(33) "wp-content/gallery/219johan-wynke" ["title"]=> string(28) "Johan & Wynke's wedding" ["galdesc"]=> string(11) "12 May 2011" ["pageid"]=> string(3) "925" ["previewpic"]=> string(5) "13114" ["author"]=> string(1) "5" ["counter"]=> string(2) "25" ["imagecounter"]=> string(2) "23" ["videocounter"]=> string(1) "2" ["previewname"]=> string(16) "20110512_017.jpg" ["previewurl"]=> string(94) "http://test.grendelman.net/wp/wp-content/gallery/219johan-wynke/thumbs/thumbs_20110512_017.jpg" ["pagelink"]=> string(63) "http://test.grendelman.net/wp/photos-2011/johan-wynkes-wedding/" }
 
-					$gallery -> imagecounter = $wpdb->get_var ($sql_image);
-					$gallery -> videocounter = $wpdb->get_var ($sql_video);
-					$total = $gallery -> imagecounter + $gallery -> videocounter;
+						// This is dumb as fuck, but since there is no PCRE support in MySQL, and POSIX regexp support
+						// in PHP is deprecated as of version 5.3, and since we do not rely on the description starting
+						// with 'Video' anymore, we have to iterate over the result set to find the number of videos.
 
-					$this -> album_item_srcstrings [$gallery->gid] = "<p><strong>".$gallery->counter."</strong> Photos</p>"; // only works for English
-					$this -> album_item_repstrings [$gallery->gid] = "<p><strong>$total</strong> items (<strong>".
-						$gallery -> imagecounter . "</strong> images and <strong>" . $gallery -> videocounter . "</strong> videos)</p>";
+						$sql = "SELECT filename FROM ". $wpdb->prefix . "ngg_pictures WHERE galleryid ='$gallery->gid' AND exclude != 1";
+						$filenames = $wpdb -> get_col($sql);
+
+						$gallery -> videocounter = 0;
+
+						foreach ($filenames as $f) {
+							$n = @preg_match($re, $f, $matches);
+							if ($n == 1) {
+								$gallery -> videocounter++;
+							}
+						}
+
+						$total = $gallery -> counter;
+						$gallery -> imagecounter = $gallery -> counter - $gallery -> videocounter;
+
+						$this -> album_item_srcstrings [$gallery->gid] = "<p><strong>".$gallery -> counter."</strong> Photos</p>"; // only works for English
+						$this -> album_item_repstrings [$gallery->gid] = "<p><strong>$total</strong> items (<strong>".
+							$gallery -> imagecounter . "</strong> images and <strong>" . $gallery -> videocounter . "</strong> videos)</p>";
+					}
 				}
 
 				return $gallery;
@@ -875,6 +904,8 @@ EOF;
 						array (&$this, 'video_player_href_html'), 'nextgen-enhancer', 'nextgen-enhancer-main');
 				add_settings_field ('nextgen_enhancer_video_extra_vheight', 'Extra height for video player',
 						array (&$this, 'video_extra_vheight_html'), 'nextgen-enhancer', 'nextgen-enhancer-main');
+				add_settings_field ('nextgen_enhancer_use_tzzbox', 'Use Tzzbox overlay effect',
+						array (&$this, 'use_tzzbox_html'), 'nextgen-enhancer', 'nextgen-enhancer-main');
 			}
 
 			function default_copyright_html ()
@@ -1051,6 +1082,18 @@ EOT;
 					<input type="text" size="4" name="nextgen_enhancer_options[video_extra_vheight]" id="nextgen_enhancer_video_extra_vheight" autocomplete="off" value="$val" /> pixels<br />
 					When using an overlay like Lightview, extra height can be added to the content container. For example, if your video player has a control bar below the video,
 					that takes 30 pixels, enter 30 here.
+EOT;
+			}
+
+			function use_tzzbox_html ()
+			{
+				$val = (isset ($this -> options ['use_tzzbox']) ? $this -> options ['use_tzzbox'] : "");
+				$ch = "";
+				if ($val == 'yes') $ch = "checked";
+				echo <<<EOT
+					<input type="checkbox" name="nextgen_enhancer_options[use_tzzbox]" id="nextgen_enhancer_use_tzzbox" value="yes" autocomplete="off" $ch />
+					Check this to load the Tzzbox overlay effect, that comes with this plugin. You might call it a 'Lightbox clone' and it is designed to
+					be a drop-in replacement for Lightview, at least in the way it is used.
 EOT;
 			}
 
