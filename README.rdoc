@@ -147,7 +147,7 @@ The XML format is as follows:
  </flv>
  </fileset>
 
-=== Tzzbox overlay effect ===
+=== Tzzbox overlay effect
 
 NextGEN Enhancer comes with 'Tzzbox', a Lightbox-like effect, based on jQuery
 TOOLS [7] and written by the same author as NextGEN Enhancer. It was inspired
