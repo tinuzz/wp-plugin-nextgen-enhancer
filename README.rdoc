@@ -117,24 +117,27 @@ image of a video file. This means a couple of things:
 * For each matching file, the link for the thumbnail when viewing a gallery
   will point at the .swf of a flash video player, that you can set using the
   'HTML reference to Flash video player' option. This has been tested with
-  JW Player [3] and Flowplayer [4], but only using Lightview [5] to view the
-  gallery, so this may or may not work for you at all.
+  JW Player [3] and Flowplayer [4], but only using Lightview [5] or the 'Tzzbox'
+  overlay effect that comes with this plugin to view the gallery, so this may
+  or may not work for you at all.
 * For matching files, an XML file is read for video meta-data. At this point,
   only width and height are imported. This information can be used to instruct
   your Lightview/Lightbox/Shadowbox viewer which size to open the video.
 
 The following has to be taken into account:
 
-* Only tested with Lightview. Other lightbox clones almost guaranteed not to work.
+* Only tested with Lightview and Tzzbox. Other lightbox clones almost guaranteed
+  not to work.
 * Your filenames have to follow a certain convention:
   - say, the preview image is named 'myvideo.mp4.jpg'
   - the actual video should then be named 'myvideo.mp4' and be located in the same
     directory
   - the meta-data XML should be named 'myvideo.mp4.xml'.
 * The format of the XML file is fixed for now. This should change in the future.
-* For Lightview, the description template for videos (see options page) should
-  contain the tag {lightviewoptions} at the end. This tag will make sure that
-  the description is formatted, so that Lightview knows the dimensions of the video.
+* For both Lightview and Tzzbox, the description template for videos (see options page)
+  should contain the tag {lightviewoptions} at the end. This tag will make sure that
+  the description is formatted, so that Lightview/Tzzbox knows the dimensions of the
+  video.
 
 The XML format is as follows:
 
