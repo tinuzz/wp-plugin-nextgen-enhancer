@@ -58,4 +58,4 @@ for more information.
 
 Development is primarily tracked on Github, so if you have problems, and feel the
 need to report a bug, please do it here:
-[issues](https://github.com/tinuzz/wp-plugin-nextgen-enhancer/issues nextgen-enhancer/issues).
+[issues](https://github.com/tinuzz/wp-plugin-nextgen-enhancer/issues).
