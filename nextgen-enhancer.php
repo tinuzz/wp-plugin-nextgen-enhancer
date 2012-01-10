@@ -47,7 +47,7 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				"hide_ngg_description" => "",
 				"description_template" => "{filename} {maplink} {fullsizelink} :: {caption}<br/>{created}<br/>Camera: {camera}<br/>Exposure: {shutterspeed} at {iso} ISO. Focal length: {focallength}<br/><br/>&copy; {copyright}<br/>",
 				"desc_video_template" => "{filename} :: {caption}<br/>{created}<br/><br/>&copy; {copyright}<br/><br/>{lightviewoptions}",
-				"support_video"         => "yes",
+				"support_video"         => "",
 				"video_regexp"         => '/\.(mp4|flv)\.jpg$/i',
 				"video_player_href"    => "/lib/jwplayer/player.swf?file={fileref}&autostart=true&provider=http",
 				"video_extra_vheight"  => 0

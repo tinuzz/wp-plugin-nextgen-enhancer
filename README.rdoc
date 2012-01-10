@@ -94,7 +94,10 @@ default. To make use of this feature, you should take the following steps:
 
 === Video support
 
-To turn this option on, check the 'Video support' checkbox on the options page.
+This feature is the one that has the most prerequisites before it might become
+of use to you. To turn this option on, check the 'Video support' checkbox on
+the options page. It is turned off by default.
+
 With this feature, NextGEN Enhancer will check the filename of each new image
 that is imported into NextGEN Gallery against a regular expression that you can
 provide. If the filename matches, the file is considered to be the preview
@@ -107,7 +110,7 @@ image of a video file. This means a couple of things:
 * For each matching file, the link for the thumbnail when viewing a gallery
   will point at the .swf of a flash video player, that you can set using the
   'HTML reference to Flash video player' option. This has been tested with
-  JW Player [3] and Flowplayer [4], but only using Lightview to view the
+  JW Player [3] and Flowplayer [4], but only using Lightview [5] to view the
   gallery, so this may or may not work for you at all.
 * For matching files, an XML file is read for video meta-data. At this point,
   only width and height are imported. This information can be used to instruct
@@ -115,12 +118,17 @@ image of a video file. This means a couple of things:
 
 The following has to be taken into account:
 
-* ONLY TESTED WITH LIGHTVIEW. OTHER LIGHTBOX CLONES ALMOST GUARANTEED NOT TO WORK.
+* Only tested with Lightview. Other lightbox clones almost guaranteed not to work.
 * Your filenames have to follow a certain convention:
   - say, the preview image is named 'myvideo.mp4.jpg'
   - the actual video should then be named 'myvideo.mp4' and be located in the same
     directory
   - the meta-data XML should be named 'myvideo.mp4.xml'.
+* After importing, the filename without its image extension (in the example:
+  'myvideo.mp4') will be entered as the 'Alt & Title Text'. This is NextGEN
+  Gallery's default behaviour. This value should not be changed, because NextGEN
+  Enhancer's javascript will use this value to create the link to the video
+  file. If you change the Alt & Title Text, the link may become broken.
 * The format of the XML file is fixed for now. This should change in the future.
 * This feature only works if 'Automatic description management' is active, or you
   had NextGEN Enhancer assemble the description by hand, as described under 8 above.
@@ -155,3 +163,4 @@ The XML format is as follows:
 [2] http://wordpress.org/extend/plugins/hidepost/
 [3] http://wordpress.org/extend/plugins/jw-player-plugin-for-wordpress/
 [4] http://wordpress.org/extend/plugins/fv-wordpress-flowplayer/
+[5] http://wordpress.org/extend/plugins/lightview-plus/
