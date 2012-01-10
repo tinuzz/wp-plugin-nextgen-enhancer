@@ -81,9 +81,8 @@ default. To make use of this feature, you should take the following steps:
    NextGEN Enhancer. No changes are made to your NextGEN Gallery database.
 6. Globally update the descriptions of all images in your dabase. This WILL make
    changes in your NextGEN Gallery database; that's why this is a separate step.
-   You can do this by clicking the 'Update all descriptions' button on the options
-   page (NOT IMPLEMENTED YET). A means of doing this on a per-gallery basis is
-   provided under 8.
+   You can do this by clicking the 'Globally update descriptions' button on the
+   options page. A means of doing this on a per-gallery basis is provided under 8.
 7. (Optional) When managing a gallery, there is a new checkbox in the rightmost
    column named 'NextGEN Enhancer enabled'. If this is checked, it means a
    record for that particular image is present in NextGEN Enhancer's table, and
