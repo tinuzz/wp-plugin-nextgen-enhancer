@@ -53,5 +53,5 @@ irreversible.
 == More information ==
 
 Please refer to
-https://github.com/tinuzz/wp-plugin-nextgen-enhancer/blob/master/README.rdoc
+[github](https://github.com/tinuzz/wp-plugin-nextgen-enhancer/blob/master/README.rdoc)
 for more information.
