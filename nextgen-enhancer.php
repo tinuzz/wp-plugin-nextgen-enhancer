@@ -143,11 +143,14 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				// Print a warning about global option, if appropriate
 				add_action ('ngg_manage_gallery_settings', array (&$this, 'ngg_manage_gallery_settings'));
 
+				add_action ('wp_ajax_ngg_ajax_operation', array (&$this, 'wp_ajax_ngg_ajax_operation_early'), 8);
+				add_action ('wp_ajax_ngg_ajax_operation', array (&$this, 'wp_ajax_ngg_ajax_operation_late'), 12);
+
 				// Filter to run before adding a new image to the database
 				add_filter ('ngg_pre_add_new_image', array (&$this, 'ngg_pre_add_new_image'), 10, 2);
 
 				// Filter 'ngg_add_new_page' to modify new page content
-				add_action ('ngg_add_new_page', array (&$this, 'ngg_add_new_page'));
+				add_action ('ngg_add_new_page', array (&$this, 'ngg_add_new_page'), 10, 2);
 			}
 
 			/**
@@ -366,6 +369,20 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 					$im = nggdb::find_image ($image['id']);
 					$picture = $im->imagePath;
 					$this -> exiftool_save_load_xmp ($picture, "load");
+				}
+			}
+
+			/**
+			 * Save data from image to XMP file
+			 */
+			function save_xmp_data ($image)
+			{
+				//$image = array( 'id' => $pic_id, 'filename' => $picture, 'galleryID' => $galleryID);
+
+				if ($this -> options ['copy_exif'] == "yes") {
+					$im = nggdb::find_image ($image['id']);
+					$picture = $im->imagePath;
+					$this -> exiftool_save_load_xmp ($picture, "save");
 				}
 			}
 
@@ -832,6 +849,7 @@ EOT;
 			{
 				$val = htmlspecialchars ($this -> options ['page_prefix']);
 				echo <<<EOT
+					Text inserted above the gallery when creating a new page for your gallery:<br />
 					<textarea rows="3" cols="60" name="nextgen_enhancer_options[page_prefix]" id="nextgen_enhancer_page_prefix" autocomplete="off">$val</textarea>
 EOT;
 			}
@@ -840,6 +858,7 @@ EOT;
 			{
 				$val = htmlspecialchars ($this -> options ['page_suffix']);
 				echo <<<EOT
+					Text inserted below the gallery when creating a new page for your gallery:<br />
 					<textarea rows="3" cols="60" name="nextgen_enhancer_options[page_suffix]" id="nextgen_enhancer_page_suffix" autocomplete="off">$val</textarea>
 EOT;
 			}
@@ -890,7 +909,9 @@ EOT;
 				if ($val == 'yes') $ch = "checked";
 				echo <<<EOT
 					<input type="checkbox" name="nextgen_enhancer_options[keep_xmpfile]" id="nextgen_enhancer_keep_xmpfile" value="yes" autocomplete="off" $ch />
-					Check this to keep the temporary XMP file from Exiftool. Uncheck it to remove the file directly after use.
+					Check this to keep the temporary XMP file from Exiftool. Uncheck it to remove the file directly after use. If you intend to perform
+					multiple modifications on your images, like resizing, rotating, etc., it may be a a good idea to keep them around, for performance and
+					safety.
 EOT;
 			}
 
@@ -1390,6 +1411,54 @@ EOT;
 				$suf = (isset ($this -> options ['page_suffix']) ? $this -> options ['page_suffix'] : "");
 				$page ['post_content'] = $pre . $page ['post_content'] . $suf;
 				return $page;
+			}
+
+			/**
+			 * Early action to run for NGG AJAX operations. It will be called for each image separately.
+			 * $_POST: Array\n(\n    [action] => ngg_ajax_operation\n    [operation] => set_watermark\n    [_wpnonce] => 1545c63963\n    [image] => 1\n)\n, referer: http://test.grendelman.net/wp/wp-admin/admin.php?page=nggallery-manage-gallery&mode=edit&gid=2&paged=1
+			 */
+			function wp_ajax_ngg_ajax_operation_early ()
+			{
+				check_ajax_referer( "ngg-ajax" );
+
+				switch ( $_POST['operation'] ) {
+					case 'resize_image' :
+					case 'rotate_cw' :
+					case 'rotate_ccw' :
+					case 'set_watermark' :
+
+						$pid = (int) $_POST ['image'];
+						if ($pid > 0) {
+							$image = array ('id' => $pid);
+							$this -> save_xmp_data ($image);
+						}
+					break;
+				}
+			}
+
+			/**
+			 * Early action to run for NGG AJAX operations. It will be called for each image separately.
+			 * NOTE: This doesn't work out of the box with NextGEN Gallery 1.9.1.
+			 * admin/ajax.php needs a modification, please see http://code.google.com/p/nextgen-gallery/issues/detail?id=451
+			 * die ($result) on line 69 should be changed to echo "$result\n";
+			 */
+			function wp_ajax_ngg_ajax_operation_late ()
+			{
+				check_ajax_referer( "ngg-ajax" );
+
+				switch ( $_POST['operation'] ) {
+					case 'resize_image' :
+					case 'rotate_cw' :
+					case 'rotate_ccw' :
+					case 'set_watermark' :
+
+						$pid = (int) $_POST ['image'];
+						if ($pid > 0) {
+							$image = array ('id' => $pid);
+							$this -> load_xmp_data ($image);
+						}
+					break;
+				}
 			}
 
 		} // class

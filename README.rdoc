@@ -54,6 +54,10 @@ the options page. You will have to specify the path to `exiftool', too. The
 default path is <tt>/usr/bin/exiftool</tt>, which is suitable for Debian/Ubuntu
 if you have <tt>libimage-exiftool-perl</tt> installed.
 
+IMPORTANT NOTE: this currently only works for importing new images. For image
+operations like resizing, the meta-data is NOT written back to the image, due
+to a bug in NextGEN Gallery. See [6] for more information.
+
 === Automatic management of image descriptions
 
 This is the most complex feature of NextGEN Enhancer and it is turned off by
@@ -154,6 +158,7 @@ The XML format is as follows:
 * Make video support in album view work in other languages than English
 * Make the format of the video metadata XML configurable
 * Support other Lightbox clones than Lightview for videos
+* Support NextGEN Gallery's ImageBrowser for videos
 * See how video support works in a default NextGEN Gallery installation
 * Improve documentation
 
@@ -164,3 +169,4 @@ The XML format is as follows:
 [3] http://wordpress.org/extend/plugins/jw-player-plugin-for-wordpress/
 [4] http://wordpress.org/extend/plugins/fv-wordpress-flowplayer/
 [5] http://wordpress.org/extend/plugins/lightview-plus/
+[6] http://code.google.com/p/nextgen-gallery/issues/detail?id=451
