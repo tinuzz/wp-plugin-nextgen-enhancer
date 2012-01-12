@@ -168,6 +168,15 @@
 					else if (e.which == 32) {
 						Tzzbox.toggle_slideshow();
 					}
+					else if (e.which == 109) {   // '-'
+						Tzzbox.hide_nav();
+					}
+					else if (e.which == 61) {   // '='
+						Tzzbox.unhide_nav();
+					}
+					//else {
+					//	alert (e.which);
+					//}
 					return false;
 				});
 			}
@@ -398,6 +407,14 @@
 				Tzzbox.slideTimer = window.setTimeout(Tzzbox.slide_next, Tzzbox.options.slideshowDelay * 1000);
 			}
 		},
+
+		hide_nav : function () {
+			$("#tzzbox_nav").fadeOut(300);
+		},
+
+		unhide_nav : function () {
+			$("#tzzbox_nav").fadeIn(300);
+		}
 	}
 
 	$.fn.tzzbox = function( method ) {
