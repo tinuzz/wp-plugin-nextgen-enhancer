@@ -110,6 +110,9 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 
 				// This hook is called upon activation of the plugin
 				register_activation_hook(__FILE__, array (&$this, 'nextgen_enhancer_install'));
+
+				// Shortcode for album pages navbar
+				add_shortcode ('nggenav', array (&$this, 'shortcode_nggenav'));
 			}
 
 			/**
@@ -1571,6 +1574,40 @@ EOT;
 						}
 					break;
 				}
+			}
+
+			function shortcode_nggenav ($atts)
+			{
+				global $post;
+
+				$atts = shortcode_atts (array (
+						'scope' => 'siblings'
+					), $atts);
+
+				if ($atts ['scope'] == 'children') {
+					$parent = $post -> ID;
+				}
+				else {
+					$parent = $post -> post_parent;
+				}
+
+				$opts = array (
+					'meta_key'    => 'ngg_album',
+					'sort_column' => 'menu_order,post_title',
+					'sort_order'  => 'desc',
+					'title_li'    => '',
+					'parent'      => $parent,  // only get siblings or children of current page
+				);
+
+				$pages = get_pages ($opts);
+				$rewrite_pattern = '/Photos? (.*)/';
+				$rewrite_replace = '\\1';
+				$links = array();
+				foreach ($pages as $p) {
+					$links[] = "<a href = \"" . get_page_link ($p -> ID) ."\">".
+						ucfirst (preg_replace ($rewrite_pattern, $rewrite_replace, $p -> post_title)). "</a>";
+				}
+				return implode(' | ', $links);
 			}
 
 		} // class
