@@ -27,6 +27,10 @@ It makes certain assumptions about how your content is organised, and it makes
 changes to your NextGEN Gallery database, although it is configurable in many
 ways, and is relatively safe to use.
 
+Please refer to
+[github](https://github.com/tinuzz/wp-plugin-nextgen-enhancer/blob/master/README.rdoc)
+for more information.
+
 == Installation ==
 
 1. Upload the whole `nextgen-enhancer` directory and its contents
@@ -47,6 +51,11 @@ irreversible.
 
 == Changelog ==
 
+= 1.1 =
+* NOT RELEASED YET
+* Tzzbox: make '-' and '=' hide/unhide the navigation button bar
+* Add [nggenav] shortcode
+
 = 1.0 =
 * First public release
 
@@ -58,4 +67,5 @@ for more information.
 
 Development is primarily tracked on Github, so if you have problems, and feel the
 need to report a bug, please do it here:
-[issues](https://github.com/tinuzz/wp-plugin-nextgen-enhancer/issues).
+[issues](https://github.com/tinuzz/wp-plugin-nextgen-enhancer/issues)
+
