@@ -3,7 +3,7 @@
 /*
 Plugin Name: NextGEN Enhancer
 Plugin Script: nextgen-enhancer.php
-Plugin URI: http://www.grendelman.net/nextgen-enhancer
+Plugin URI: https://www.grendelman.net/wp/nextgen-enhancer/
 Description: NextGEN Gallery Enhancer
 Version: 1.0
 Author: Martijn Grendelman
