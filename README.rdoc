@@ -47,9 +47,11 @@ This plugin has the following features:
   that will be automatically added to the gallery page. This works nicely,
   for example when protecting your pages with Hidepost [2].
 
-* Tzzbox overlay effect. NextGEN Enhancer comes with its own Lightbox
-  alternative. When enabled, the JavaScript Thumbnail effect setting of
+* (Experimental) Tzzbox overlay effect. NextGEN Enhancer comes with its own
+  Lightbox alternative. When enabled, the JavaScript Thumbnail effect setting of
   NextGEN Gallery is overridden.
+
+* (Experimental) A shortcode [nggenav] for quick navigation between album pages.
 
 === Retaining meta-data
 
@@ -150,7 +152,7 @@ The XML format is as follows:
  </flv>
  </fileset>
 
-=== Tzzbox overlay effect
+=== Tzzbox overlay effect (experimental)
 
 NextGEN Enhancer comes with 'Tzzbox', a Lightbox-like effect, based on jQuery
 TOOLS [7] and written by the same author as NextGEN Enhancer. It was inspired
@@ -163,6 +165,32 @@ Wordpress install, the tools might be loaded twice, which may cause problems.
 The only workaround at this moment, is to edit 'tzzbox.js', find the line that
 contains 'jQuery Tools v1.2.6 - The missing UI library for the Web', and delete
 everything from that line onward.
+
+=== Album navigation shortcode (experimental)
+
+A shortcode [nggenav] allows you to quickly set up a navigation bar for album
+pages. If you, like me, have many album pages with similar names, for example
+'Photos 2012', 'Photos 2011', 'Photo specials', etc. it may be convenient to
+automatically have links to all other albums on every album page.
+
+This shortcode fetches all pages that have a meta-key named 'ngg_album' and
+creates a series of links out of them. A regular expression search-and-replace
+is done on the page titles, so you can strip off certain words. For example,
+if your pages are named like mine, you could strip off the word 'Photos' and
+just keep the year.
+
+At the moment, the search-and-replace patterns, as well as the link separator
+( | ) can only be changed in the code, but they will be turned into settings
+soon.
+
+The meta-key 'ngg_album' has to be added to the appropriate pages by hand via
+the 'Edit page' screen, in the 'Custom Fields' section. If this section is not
+visible, you can enable it via 'Screen Options', in the top-right corner of
+the screen. The value of the key does not matter.
+
+The links are sorted by page title in descending order by default, but you can
+influence this by changing the 'Order' attribute of the page. You can set a
+negative order to move a link to the start of the list.
 
 == To do
 
