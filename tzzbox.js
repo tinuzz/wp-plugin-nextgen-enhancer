@@ -123,13 +123,13 @@
 		},
 
 		load_prev : function () {
-			if (Tzzbox.prev < Tzzbox.mynum || Tzzbox.options.cyclic) {
+			if (Tzzbox.num > 1 && (Tzzbox.prev < Tzzbox.mynum || Tzzbox.options.cyclic)) {
 				Tzzbox.load_image(Tzzbox.prev, true);
 			}
 		},
 
 		load_next : function () {
-			if (Tzzbox.next > Tzzbox.mynum || Tzzbox.options.cyclic) {
+			if (Tzzbox.num > 1 && (Tzzbox.next > Tzzbox.mynum || Tzzbox.options.cyclic)) {
 				Tzzbox.load_image(Tzzbox.next, true);
 			}
 		},
