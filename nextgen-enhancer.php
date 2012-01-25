@@ -5,7 +5,7 @@ Plugin Name: NextGEN Enhancer
 Plugin Script: nextgen-enhancer.php
 Plugin URI: https://www.grendelman.net/wp/nextgen-enhancer/
 Description: NextGEN Gallery Enhancer
-Version: 1.0
+Version: 1.0.1
 Author: Martijn Grendelman
 Author URI: http://www.grendelman.net/
 Template by: http://web.forret.com/tools/wp-plugin.asp

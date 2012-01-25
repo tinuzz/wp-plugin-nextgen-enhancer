@@ -51,12 +51,14 @@ irreversible.
 
 == Changelog ==
 
-= 1.1 =
-* NOT RELEASED YET
+= 1.0.1 - 2012-01-25 =
+
 * Tzzbox: make '-' and '=' hide/unhide the navigation button bar
 * Add [nggenav] shortcode
+* Increase version number now, because the changes mentioned here were accidentally
+  already present in the 1.0 version on wordpress.org since January 23.
 
-= 1.0 =
+= 1.0 - 2012-01-10 =
 * First public release
 
 == More information ==
