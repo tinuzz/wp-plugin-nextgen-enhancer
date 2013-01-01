@@ -155,6 +155,7 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 
 				add_action ('wp_ajax_ngg_ajax_operation', array (&$this, 'wp_ajax_ngg_ajax_operation_early'), 8);
 				add_action ('wp_ajax_ngg_ajax_operation', array (&$this, 'wp_ajax_ngg_ajax_operation_late'), 12);
+				add_action ('ngg_ajax_final_operation', array (&$this, 'wp_ajax_ngg_ajax_operation_late'));
 
 				// Filter to run before adding a new image to the database
 				add_filter ('ngg_pre_add_new_image', array (&$this, 'ngg_pre_add_new_image'), 10, 2);
@@ -1552,10 +1553,11 @@ EOT;
 			}
 
 			/**
-			 * Early action to run for NGG AJAX operations. It will be called for each image separately.
-			 * NOTE: This doesn't work out of the box with NextGEN Gallery 1.9.1.
+			 * Late action to run for NGG AJAX operations. It will be called for each image separately.
+			 * NOTE: This doesn't work out of the box with NextGEN Gallery 1.9.1 to 1.9.10 and maybe later.
 			 * admin/ajax.php needs a modification, please see http://code.google.com/p/nextgen-gallery/issues/detail?id=451
-			 * die ($result) on line 69 should be changed to echo "$result\n";
+			 * On line 68, the following code should be inserted:
+			 *   do_action ('ngg_ajax_final operation');
 			 */
 			function wp_ajax_ngg_ajax_operation_late ()
 			{
