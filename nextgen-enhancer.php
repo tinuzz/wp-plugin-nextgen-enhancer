@@ -105,6 +105,9 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				// Filter to replace the link on videos, when video support is enabled
 				add_filter ('ngg_create_gallery_link', array (&$this, 'ngg_create_gallery_link'), 10, 2);
 
+				// Filter to add information to image metadata
+				add_filter ('ngg_get_image_metadata', array (&$this, 'ngg_get_image_metadata'), 10, 2);
+
 				// Filter to replace the thumbnail effect code, when Tzzbox is enabled
 				add_filter ('ngg_get_thumbcode', array (&$this, 'ngg_get_thumbcode'), 10, 2);
 
@@ -477,6 +480,29 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 					}
 				}
 				return $link;
+			}
+
+			/**
+			 * Handler for 'ngg_get_image_metadata' filter.
+			 * This function expands the image metadata that NGG stores
+			 */
+			function ngg_get_image_metadata ($meta, $pdata) {
+				if ( isset($pdata->exif_data['GPS']) ) {
+					$exif = $pdata->exif_data['GPS'];
+					if (!empty($exif['GPSLatitudeRef']))
+						$meta['common']['GPSLatitudeRef'] = trim( $exif['GPSLatitudeRef'] );
+					if (!empty($exif['GPSLatitude']))
+						$meta['common']['GPSLatitude'] = $exif['GPSLatitude'];
+					if (!empty($exif['GPSLongitudeRef']))
+						$meta['common']['GPSLongitudeRef'] = trim( $exif['GPSLongitudeRef'] );
+					if (!empty($exif['GPSLongitude']))
+						$meta['common']['GPSLongitude'] = $exif['GPSLongitude'];
+					if (!empty($exif['GPSAltitudeRef']))
+						$meta['common']['GPSAltitudeRef'] = trim( $exif['GPSAltitudeRef'] );
+					if (!empty($exif['GPSAltitude']))
+						$meta['common']['GPSAltitude'] = trim( $exif['GPSAltitude'] );
+				}
+				return $meta;
 			}
 
 			function ngg_get_thumbcode ($thumbcode, $picture)
