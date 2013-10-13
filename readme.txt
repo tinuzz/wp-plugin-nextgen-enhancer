@@ -10,6 +10,8 @@ This plugins enhances the functionality of NextGEN Gallery version 1.9.0 or high
 
 == Description ==
 
+THIS PLUGIN DOES NOT WORK WITH NEXTGEN GALLERY >= 2.0 !!
+
 This plugin enhances the functionality of NextGEN Gallery. Its features:
 
 * Retaining meta-data across image operations, like resizing.
