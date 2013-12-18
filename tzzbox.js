@@ -14,7 +14,7 @@
  * - the icons are from Crystal Project Icons, Everaldo Coelho, http://www.everaldo.com
 */
 
-shutterOnload = function(){shutterReloaded.init('sh');}
+shutterOnload = function(){shutterReloaded.init();}
 
 if (typeof shutterOnload == 'function') {
 	if ('undefined' != typeof jQuery) jQuery(document).ready(function(){shutterOnload();});
@@ -36,7 +36,7 @@ shutterReloaded = {
 		t.msgClose = s.msgClose || 'Click to Close';
 	},
 
-	init : function (a) {
+	init : function () {
 		var t = this, L, T, ext, i, m, setid, inset, shfile, shMenuPre, k, img;
 		shutterLinks = {}, shutterSets = {};
 		if ( 'object' != typeof shutterSettings ) shutterSettings = {};
@@ -48,13 +48,10 @@ shutterReloaded = {
 			L = document.links[i];
 			ext = ( L.href.indexOf('?') == -1 ) ? L.href.slice(-4).toLowerCase() : L.href.substring( 0, L.href.indexOf('?') ).slice(-4).toLowerCase();
 			if ( ext != '.jpg' && ext != '.png' && ext != '.gif' && ext != 'jpeg' && ext != '.mp4' ) continue;
-			if ( a == 'sh' && L.className.toLowerCase().indexOf('shutter') == -1 ) continue;
-			if ( a == 'lb' && L.rel.toLowerCase().indexOf('lightbox') == -1 ) continue;
+			if ( L.className.toLowerCase().indexOf('shutter') == -1 ) continue;
 
 			if ( L.className.toLowerCase().indexOf('shutterset') != -1 )
-			setid = L.className.replace(/\s/g, '_');
-			else if ( L.rel.toLowerCase().indexOf('lightbox[') != -1 )
-			setid = L.rel.replace(/\s/g, '_');
+				setid = L.className.replace(/\s/g, '_');
 			else setid = 0, inset = -1;
 
 			if( setid ) {
