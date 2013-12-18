@@ -1,12 +1,17 @@
-/*
-Shutter Reloaded for NextGEN Gallery
-http://www.laptoptips.ca/javascripts/shutter-reloaded/
-Version: 1.3.3
-Copyright (C) 2007-2008  Andrew Ozz (Modification by Alex Rabe)
-Released under the GPL, http://www.gnu.org/copyleft/gpl.html
-
-Acknowledgement: some ideas are from: Shutter by Andrew Sutherland - http://code.jalenack.com, WordPress - http://wordpress.org, Lightbox by Lokesh Dhakar - http://www.huddletogether.com, the icons are from Crystal Project Icons, Everaldo Coelho, http://www.everaldo.com
-
+/* Tzzbox 1.1 - 18 December 2013
+ * Copyright (c) 2013 Martijn Grendelman (http://www.grendelman.net/)
+ *
+ * Based on Shutter Reloaded for NextGEN Gallery v1.3.3
+ * http://www.laptoptips.ca/javascripts/shutter-reloaded/
+ * Copyright (C) 2007-2008  Andrew Ozz (Modification by Alex Rabe)
+ * Released under the GPL, http://www.gnu.org/copyleft/gpl.html
+ *
+ * Acknowlegdments from the original author:
+ * Some ideas are from:
+ * - Shutter by Andrew Sutherland - http://code.jalenack.com
+ * - WordPress - http://wordpress.org
+ * - Lightbox by Lokesh Dhakar - http://www.huddletogether.com
+ * - the icons are from Crystal Project Icons, Everaldo Coelho, http://www.everaldo.com
 */
 
 shutterOnload = function(){shutterReloaded.init('sh');}
@@ -18,8 +23,6 @@ if (typeof shutterOnload == 'function') {
 }
 
 shutterReloaded = {
-
-
 
 	I : function (a) {
 		return document.getElementById(a);
@@ -37,10 +40,10 @@ shutterReloaded = {
 		var t = this, L, T, ext, i, m, setid, inset, shfile, shMenuPre, k, img;
 		shutterLinks = {}, shutterSets = {};
 		if ( 'object' != typeof shutterSettings ) shutterSettings = {};
-        
-        // If the screen orientation is defined we are in a modern mobile OS
-        t.mobileOS = typeof orientation != 'undefined' ? true : false;
-                
+
+		// If the screen orientation is defined we are in a modern mobile OS
+		t.mobileOS = typeof orientation != 'undefined' ? true : false;
+
 		for ( i = 0; i < document.links.length; i++ ) {
 			L = document.links[i];
 			ext = ( L.href.indexOf('?') == -1 ) ? L.href.slice(-4).toLowerCase() : L.href.substring( 0, L.href.indexOf('?') ).slice(-4).toLowerCase();
@@ -49,16 +52,16 @@ shutterReloaded = {
 			if ( a == 'lb' && L.rel.toLowerCase().indexOf('lightbox') == -1 ) continue;
 
 			if ( L.className.toLowerCase().indexOf('shutterset') != -1 )
-			setid = L.className.replace(/\s/g, '_');			
+			setid = L.className.replace(/\s/g, '_');
 			else if ( L.rel.toLowerCase().indexOf('lightbox[') != -1 )
 			setid = L.rel.replace(/\s/g, '_');
 			else setid = 0, inset = -1;
-			
+
 			if( setid ) {
 				if ( ! shutterSets[setid] ) shutterSets[setid] = [];
-					inset = shutterSets[setid].push(i);
+				inset = shutterSets[setid].push(i);
 			}
-			
+
 			shfile = L.href.slice(L.href.lastIndexOf('/')+1);
 			T = ( L.title && L.title != shfile ) ? L.title : '';
 
@@ -68,7 +71,7 @@ shutterReloaded = {
 			else {
 				linktype = 'image';
 			}
-			
+
 			shutterLinks[i] = {link:L.href,num:inset,set:setid,title:T,linktype:linktype}
 			L.onclick = new Function('shutterReloaded.make("' + i + '");return false;');
 		}
@@ -92,12 +95,12 @@ shutterReloaded = {
 		else t.FS = shutterSettings.FS || 0;
 
 		if ( t.resizing ) t.resizing = null;
-        
-        // resize event if window or orientation changed (i.e. iOS)
-        if(t.mobileOS == true)
-            window.onorientationchange = new Function('shutterReloaded.resize("'+ln+'");');
-        else
-            window.onresize = new Function('shutterReloaded.resize("'+ln+'");');
+
+		// resize event if window or orientation changed (i.e. iOS)
+		if(t.mobileOS == true)
+			window.onorientationchange = new Function('shutterReloaded.resize("'+ln+'");');
+		else
+			window.onresize = new Function('shutterReloaded.resize("'+ln+'");');
 
 		document.documentElement.style.overflowX = 'hidden';
 		if ( ! t.VP ) {
@@ -161,7 +164,7 @@ shutterReloaded = {
 
 		imgNum = ( (shutterLinks[ln].num > 0) && t.imageCount ) ? '<div id="shCount">&nbsp;(&nbsp;' + shutterLinks[ln].num + '&nbsp;/&nbsp;' + shutterSets[shutterLinks[ln].set].length + '&nbsp;)&nbsp;</div>' : '';
 
-		NavBar = '<div id="shTitle"><div id="shPrev">' + prevlink + '</div><div id="shNext">' + nextlink + '</div><div id="shName">' + 
+		NavBar = '<div id="shTitle"><div id="shPrev">' + prevlink + '</div><div id="shNext">' + nextlink + '</div><div id="shName">' +
 			'<b>' + caption + '</b><br />' + description + '</div>' + imgNum + '</div>';
 
 		if (shutterLinks[ln].linktype == 'video') {
@@ -334,29 +337,29 @@ shutterReloaded = {
 	},
 
 	handleArrowKeys : function(e) {
-	    var code = 0;
-	    if (!e) var e = window.event
-	    	if (e.keyCode) code = e.keyCode;
-	    	else if (e.which) code = e.which;
-	    	
+		var code = 0;
+		if (!e) var e = window.event
+		if (e.keyCode) code = e.keyCode;
+		else if (e.which) code = e.which;
+
 		var nextlink = document.getElementById('prevpic');
 		var prevlink = document.getElementById('nextpic');
 		var closelink = document.getElementById('shTopImg');
 		var closevid = document.getElementById('shTopVid');
-	
+
 		switch (code) {
-		    case 39:
-			if (prevlink) prevlink.onclick();
-			break;    
-		    case 37:
-			if (nextlink) nextlink.onclick();
-			break;    
-		    case 27:
-			if (closelink) closelink.onclick();
-			else if (closevid) {
-				shutterReloaded.hideShutter();
-			}
-			break;    
-		 }
+			case 39:
+				if (prevlink) prevlink.onclick();
+				break;
+			case 37:
+				if (nextlink) nextlink.onclick();
+				break;
+			case 27:
+				if (closelink) closelink.onclick();
+				else if (closevid) {
+					shutterReloaded.hideShutter();
+				}
+				break;
+		}
 	}
 }
