@@ -165,7 +165,7 @@ shutterReloaded = {
 		imgNum = ( (shutterLinks[ln].num > 0) && t.imageCount ) ? '<div id="shCount">&nbsp;(&nbsp;' + shutterLinks[ln].num + '&nbsp;/&nbsp;' + shutterSets[shutterLinks[ln].set].length + '&nbsp;)&nbsp;</div>' : '';
 
 		NavBar = '<div id="shTitle"><div id="shPrev">' + prevlink + '</div><div id="shNext">' + nextlink + '</div><div id="shName">' +
-			'<b>' + caption + '</b><br />' + description + '</div>' + imgNum + '</div>';
+			'<span class="shCaption">' + caption + '</span><br />' + description + '</div>' + imgNum + '</div>';
 
 		if (shutterLinks[ln].linktype == 'video') {
 			D.innerHTML = '<div id="shWrap"><div id="shTopVid" style="width: ' + objOptions['width'] + 'px"><div id="videoplayer"></div></div>' + NavBar + '</div>';

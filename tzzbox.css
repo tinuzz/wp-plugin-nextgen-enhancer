@@ -115,3 +115,6 @@ div#shDisplay div#shName a, div#shDisplay div#shName a:hover {
 	letter-spacing: 0px;
 }
 
+.shCaption {
+	font-weight: bold;
+}
