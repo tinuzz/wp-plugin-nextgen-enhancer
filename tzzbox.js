@@ -14,15 +14,15 @@
  * - the icons are from Crystal Project Icons, Everaldo Coelho, http://www.everaldo.com
 */
 
-shutterOnload = function(){shutterReloaded.init();}
+TzzboxOnload = function(){Tzzbox.init();}
 
-if (typeof shutterOnload == 'function') {
-	if ('undefined' != typeof jQuery) jQuery(document).ready(function(){shutterOnload();});
-	else if( typeof window.onload != 'function' ) window.onload = shutterOnload;
-	else {oldonld = window.onload;window.onload = function(){if(oldonld){oldonld();};shutterOnload();}};
+if (typeof TzzboxOnload == 'function') {
+	if ('undefined' != typeof jQuery) jQuery(document).ready(function(){TzzboxOnload();});
+	else if( typeof window.onload != 'function' ) window.onload = TzzboxOnload;
+	else {oldonld = window.onload;window.onload = function(){if(oldonld){oldonld();};TzzboxOnload();}};
 }
 
-shutterReloaded = {
+Tzzbox = {
 
 	I : function (a) {
 		return document.getElementById(a);
@@ -70,7 +70,7 @@ shutterReloaded = {
 			}
 
 			shutterLinks[i] = {link:L.href,num:inset,set:setid,title:T,linktype:linktype}
-			L.onclick = new Function('shutterReloaded.make("' + i + '");return false;');
+			L.onclick = new Function('Tzzbox.make("' + i + '");return false;');
 		}
 
 		t.settings();
@@ -95,9 +95,9 @@ shutterReloaded = {
 
 		// resize event if window or orientation changed (i.e. iOS)
 		if(t.mobileOS == true)
-			window.onorientationchange = new Function('shutterReloaded.resize("'+ln+'");');
+			window.onorientationchange = new Function('Tzzbox.resize("'+ln+'");');
 		else
-			window.onresize = new Function('shutterReloaded.resize("'+ln+'");');
+			window.onresize = new Function('Tzzbox.resize("'+ln+'");');
 
 		document.documentElement.style.overflowX = 'hidden';
 		if ( ! t.VP ) {
@@ -124,7 +124,7 @@ shutterReloaded = {
 		var dv = t.textBtns ? ' | ' : '';
 		if ( shutterLinks[ln].num > 1 ) {
 			prev = shutterSets[shutterLinks[ln].set][shutterLinks[ln].num - 2];
-			prevlink = '<a href="#" id="prevpic" onclick="shutterReloaded.make('+prev+');return false">&lt;&lt;</a>'+dv;
+			prevlink = '<a href="#" id="prevpic" onclick="Tzzbox.make('+prev+');return false">&lt;&lt;</a>'+dv;
 			previmg = new Image();
 			previmg.src = shutterLinks[prev].link;
 		} else {
@@ -133,7 +133,7 @@ shutterReloaded = {
 
 		if ( shutterLinks[ln].num != -1 && shutterLinks[ln].num < (shutterSets[shutterLinks[ln].set].length) ) {
 			next = shutterSets[shutterLinks[ln].set][shutterLinks[ln].num];
-			nextlink = '<a href="#" id="nextpic" onclick="shutterReloaded.make('+next+');return false">&gt;&gt;</a>'+dv;
+			nextlink = '<a href="#" id="nextpic" onclick="Tzzbox.make('+next+');return false">&gt;&gt;</a>'+dv;
 			nextimg = new Image();
 			nextimg.src = shutterLinks[next].link;
 		} else {
@@ -176,18 +176,18 @@ shutterReloaded = {
 			t.showVid();
 		}
 		else {
-			D.innerHTML = '<div id="shWrap"><img src="'+shutterLinks[ln].link+'" id="shTopImg" title="' + t.msgClose + ' ' + shutterLinks[ln].linktype + '" onload="shutterReloaded.showImg();" />' + NavBar +'</div>';
+			D.innerHTML = '<div id="shWrap"><img src="'+shutterLinks[ln].link+'" id="shTopImg" title="' + t.msgClose + ' ' + shutterLinks[ln].linktype + '" onload="Tzzbox.showImg();" />' + NavBar +'</div>';
 			t.I('shTopImg').onclick = function (e) { e.stopPropagation(); }
 			//Google Chrome 4.0.249.78 bug for onload attribute
 			document.getElementById('shTopImg').src = shutterLinks[ln].link;
 		}
 
-		document.onkeydown = function(event){shutterReloaded.handleArrowKeys(event);};
+		document.onkeydown = function(event){Tzzbox.handleArrowKeys(event);};
 		t.I('shTitle').onclick = function(e) {
 			e.stopPropagation();
 		};
 
-		window.setTimeout(function(){shutterReloaded.loading();},1000);
+		window.setTimeout(function(){Tzzbox.loading();},1000);
 	},
 
 	loading : function() {
@@ -223,8 +223,8 @@ shutterReloaded = {
 		var W = t.I('shWrap');
 		if ( W ) W.style.visibility = 'hidden';
 
-		window.setTimeout(function(){shutterReloaded.resizing = null},500);
-		window.setTimeout(new Function('shutterReloaded.VP = null;shutterReloaded.make("'+ln+'");'),100);
+		window.setTimeout(function(){Tzzbox.resizing = null},500);
+		window.setTimeout(new Function('Tzzbox.VP = null;Tzzbox.make("'+ln+'");'),100);
 		t.resizing = true;
 	},
 
@@ -283,7 +283,7 @@ shutterReloaded = {
 		mtop = (itop > 3) ? Math.floor(itop) : 3;
 		D.style.top = t.Top + mtop + 'px';
 		W.style.visibility = 'visible';
-		shutterReloaded.clickhandler();
+		Tzzbox.clickhandler();
 	},
 
 	showVid : function() {
@@ -302,7 +302,7 @@ shutterReloaded = {
 		mtop = (itop > 3) ? Math.floor(itop) : 3;
 		D.style.top = t.Top + mtop + 'px';
 		W.style.visibility = 'visible';
-		shutterReloaded.clickhandler();
+		Tzzbox.clickhandler();
 	},
 
 	hideTags : function(arg) {
@@ -324,8 +324,7 @@ shutterReloaded = {
 		var t = this;
 		if ( S = t.I('shShutter') ) {
 			S.onclick = function(event){
-				console.log(event);
-				shutterReloaded.hideShutter();
+				Tzzbox.hideShutter();
 			}
 		};
 		if ( D = t.I('shDisplay') ) {
@@ -354,7 +353,7 @@ shutterReloaded = {
 			case 27:
 				if (closelink) closelink.onclick();
 				else if (closevid) {
-					shutterReloaded.hideShutter();
+					Tzzbox.hideShutter();
 				}
 				break;
 		}
