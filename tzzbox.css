@@ -1,99 +1,117 @@
-#tzzbox_overlay {
-
-	/* must be initially hidden */
-	display:none;
-
-	/* place overlay on top of other elements */
-	z-index:10000;
-
-	/* styling */
-	background-color:#fff;
-
-	min-width:50px;
-	min-height:50px;
-	border:1px solid #666;
-
-	padding: 10px;
-
-	/* CSS3 styling for latest browsers */
-	/*
-	-moz-box-shadow:0 0 30px 5px #000;
-	-webkit-box-shadow: 0 0 30px #000;
-	*/
-	-moz-border-radius:10px;
-	-webkit-border-radius:10px;
-}
-
-#tzzbox_nav {
-	/* must be initially hidden */
-	display:none;
-	position: fixed;
-	background-color: #6D6D6D;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	color: #D2D2D2;
-	padding: 5px 12px;
+/* Shutter */
+#shDisplay div#shTitle {
+	font: normal 12px/17px 'Lucida Grande', Verdana, sans-serif; /* caption font */
+	/* color: #ffffff; */ /*caption colour */
+	color: #000000;
 	text-align: center;
-	/*min-width: 180px; */
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
+	margin: 0 auto;
+	padding: 12px;
+	background-color: #ffffe5;
 }
 
-#tzzbox_nav img {
-	margin: 2px 2px;
-	vertical-align: middle;
+#shDisplay div#shCount {
+	color: #999999;
+	font: normal 10px/12px 'Lucida Grande', Verdana, sans-serif;
+}
+
+#shDisplay div#shTitle a {
+	text-decoration: none;
+	font: bold 16pt 'Courier New', Courier, fixed;
+	letter-spacing: -2px;
+	margin: 0 10px;
+	width: 26px;
+	color: #999999;
+}
+
+#shDisplay div#shTitle a:hover {
+	color: #ff0000;
+	border: none;
+}
+
+#shDisplay div#shNext{
+	float:right;
+}
+
+#shDisplay div#shPrev {
+	float:left;
+}
+
+body {
+	height: 100%;
+}
+
+#shShutter *, #shDisplay * {
+	padding: 0;
+	margin: 0;
+}
+
+div#shShutter, div#shDisplay {
+	top: 0;
+	left: 0;
+	width: 100%;
+	position: absolute;
+}
+
+div#shShutter {
+	height: 100%;
+	z-index: 10000;
+	background-color: #000000;
+	opacity: 0.8;
+	filter:alpha(opacity=80);
+}
+
+div#shDisplay {
+	display: block;
+	background-color: transparent;
+	z-index: 10002;
+}
+
+div#shDisplay img#shTopImg {
+	margin: 0 auto;
+	/* border: 1px solid #555; */
+	border: 0px;
+	/* background: transparent; */
+	background-color: #ffffe5;
+	display: block;
+	max-width: none;
+	max-height: none;
+	float: none;
+	padding:10px;
 	cursor: pointer;
 }
 
-#tzzbox_prevbutton {
-	border-left: 1px solid #222;
-	padding-left: 5px;
-}
-
-#tzzbox_nextbutton {
-	border-right: 1px solid #222;
-	padding-right: 5px;
-}
-
-/* close button positioned on upper right corner */
-/*
-.tzzbox_overlay .close {
-	background-image:url(close.png);
-	position:absolute;
-	right:-15px;
-	top:-15px;
-	cursor:pointer;
-	height:35px;
-	width:35px;
-}
-*/
-
-#tzzbox_details {
-	font-size:11px;
-	color:#7a7a7a;
-	/* padding-top: 5px; */
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	line-height: normal;
-}
-
-#tzzbox_details h3 {
-	color:#7a7a7a;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size:15px;
-	font-weight: 700;
-	line-height: normal ;
-	margin: 5px 0;
-}
-
-/* Clickable areas on left and right side of an object */
-#tzzbox_prev, #tzzbox_next {
-	width: 200px;
-	height: 200px;
-	/* border: 1px solid red; */
+div#shDisplay div#shTopVid {
+	margin: 0 auto;
 	border: 0;
-	z-index:10001;
-	position: absolute;
-	vertical-align: middle;
+	/* background: transparent; */
+	background-color: #ffffe5;
+	padding:10px;
+	cursor: pointer;
+	width: 680;
+	height: 450;
+}
+
+div#shDisplay div#shWrap {
+	visibility: hidden;
+}
+
+div#shWaitBar {
+	font: bold 32px 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+	height: 36px;
+	width: 100%;
+	left: 0;
+	cursor: default;
+	opacity: 0.999;
+	filter: alpha(opacity=100);
+	z-index: 10001;
+	margin-top: 160px;
+	color: #ae0a0a;
+    text-align: center;
+}
+
+div#shDisplay div#shName a, div#shDisplay div#shName a:hover {
+	color: blue;
+	font: normal 12px 'Lucida Grande', Verdana, sans-serif;
+	letter-spacing: 0px;
 }
 

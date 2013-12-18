@@ -5,12 +5,13 @@ Plugin Name: NextGEN Enhancer
 Plugin Script: nextgen-enhancer.php
 Plugin URI: https://www.grendelman.net/wp/nextgen-enhancer/
 Description: NextGEN Gallery Enhancer
-Version: 1.0.1
+Version: 1.1
 Author: Martijn Grendelman
 Author URI: http://www.grendelman.net/
 Template by: http://web.forret.com/tools/wp-plugin.asp
 
 === RELEASE NOTES ===
+2013-12-18 - v1.1 - replace tzzbox with shutter-reloaded based code
 2011-02-18 - v1.0 - first version
 */
 
@@ -51,6 +52,7 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				"video_regexp"         => '/\.(mp4|flv)\.jpg$/i',
 				"video_player_href"    => "/lib/jwplayer/player.swf?file={fileref}&autostart=true&provider=http",
 				"video_extra_vheight"  => 0,
+				"video_max_height"     => 480,
 				"use_tzzbox"           => "",
 			);
 
@@ -105,7 +107,7 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				// Filter to replace the link on videos, when video support is enabled
 				add_filter ('ngg_create_gallery_link', array (&$this, 'ngg_create_gallery_link'), 10, 2);
 
-				// Filter to add information to image metadata
+				// Filter to add GPS information to image metadata
 				add_filter ('ngg_get_image_metadata', array (&$this, 'ngg_get_image_metadata'), 10, 2);
 
 				// Filter to replace the thumbnail effect code, when Tzzbox is enabled
@@ -158,7 +160,6 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 
 				add_action ('wp_ajax_ngg_ajax_operation', array (&$this, 'wp_ajax_ngg_ajax_operation_early'), 8);
 				add_action ('wp_ajax_ngg_ajax_operation', array (&$this, 'wp_ajax_ngg_ajax_operation_late'), 12);
-				add_action ('ngg_ajax_final_operation', array (&$this, 'wp_ajax_ngg_ajax_operation_late'));
 
 				// Filter to run before adding a new image to the database
 				add_filter ('ngg_pre_add_new_image', array (&$this, 'ngg_pre_add_new_image'), 10, 2);
@@ -242,8 +243,9 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 			{
 				if (isset ($this -> options) && $this -> options ["use_tzzbox"] == "yes") {
 					wp_enqueue_script ('nextgen-tzzbox',      plugins_url('tzzbox.js', __FILE__));
-					wp_enqueue_script ('nextgen-tzzboxinit',  plugins_url('nextgen-tzzbox.js', __FILE__));
+					//wp_enqueue_script ('nextgen-tzzboxinit',  plugins_url('nextgen-tzzbox.js', __FILE__));
 					wp_enqueue_style  ('nextgen-tzzbox',      plugins_url('tzzbox.css', __FILE__));
+					wp_enqueue_script ('nextgen-jwplayer',  plugins_url('jwplayer/jwplayer.js', __FILE__));
 				}
 			}
 
@@ -508,7 +510,8 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 			function ngg_get_thumbcode ($thumbcode, $picture)
 			{
 				if (isset ($this -> options ["use_tzzbox"]) && $this -> options ["use_tzzbox"] == "yes") {
-					$thumbcode = 'class="tzzbox" rel="set[' . $picture -> name . ']"';
+					//$thumbcode = 'class="tzzbox" rel="set[' . $picture -> name . ']"';
+					$thumbcode = 'class="shutterset_'. $picture -> name .'"';
 				}
 				return $thumbcode;
 			}
@@ -523,48 +526,9 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				$player = htmlspecialchars (addslashes ($this -> options ['video_player_href']));
 				$jwplayer = "";
 
-				/*
-				$file = "http://test.grendelman.net/wp/wp-content/gallery/219johan-wynke/20110512_001-1000.mp4";
-				$jwplayer = <<<EOT
-
-<div id="jwcontainer" style="display: none ">Loading the player ...</div>
-
-<script type="text/javascript" src="http://test.grendelman.net/wp/wp-content/uploads/jw-player-plugin-for-wordpress/player/jwplayer.js"></script>
-<script type="text/javascript">
-
-	function setup_jwplayer ()
- 	{
-		jwplayer("jwcontainer").setup({
-			//flashplayer: "/wp/wp-content/uploads/jw-player-plugin-for-wordpress/player/player.swf",
-			'modes': [
-					{type: 'html5'},
-					{type: 'flash', src: '/wp/wp-content/uploads/jw-player-plugin-for-wordpress/player/player.swf'},
-					{type: 'download'}
-			],
-			file: "$file",
-			autostart: false,
-			height: 480,
-			width: 800,
-			provider: "http",
-			//stretching: "none",
-			skin: "/wp/wp-content/plugins/jw-player-plugin-for-wordpress/skins/whotube/whotube.zip"
-		});
-	}
-
-</script>
-
-EOT;
-				*/
-
-					/* Javscript change file:
-					 * file = { file: "/path/to/file.mp4" };
-					 * jwplayer("jwcontainer").load(file);
-					 */
-
 				$hdr = (strlen ($gallery -> galdesc) ? "<h3>". $gallery -> galdesc . "</h3>\n" : "");
 
 				return $hdr . $content;
-				//return $hdr . $js . $jwplayer . $content;
 
 			}
 
@@ -581,8 +545,6 @@ EOT;
 
 					// Only work if we have a regexp available
 					if (isset ($this -> options ['video_regexp']) && ($re = $this -> options ['video_regexp']) != "") {
-
-						//object(stdClass)#178 (15) { ["gid"]=> string(3) "206" ["name"]=> string(14) "219johan-wynke" ["slug"]=> string(22) "johan-wynkes-wedding-2" ["path"]=> string(33) "wp-content/gallery/219johan-wynke" ["title"]=> string(28) "Johan & Wynke's wedding" ["galdesc"]=> string(11) "12 May 2011" ["pageid"]=> string(3) "925" ["previewpic"]=> string(5) "13114" ["author"]=> string(1) "5" ["counter"]=> string(2) "25" ["imagecounter"]=> string(2) "23" ["videocounter"]=> string(1) "2" ["previewname"]=> string(16) "20110512_017.jpg" ["previewurl"]=> string(94) "http://test.grendelman.net/wp/wp-content/gallery/219johan-wynke/thumbs/thumbs_20110512_017.jpg" ["pagelink"]=> string(63) "http://test.grendelman.net/wp/photos-2011/johan-wynkes-wedding/" }
 
 						// This is dumb as fuck, but since there is no PCRE support in MySQL, and POSIX regexp support
 						// in PHP is deprecated as of version 5.3, and since we do not rely on the description starting
@@ -649,7 +611,6 @@ EOT;
 				global $wpdb;
 
 				$gallery = nggdb::find_gallery ($id);
-				// object(stdClass)#121 (10) { ["gid"]=> string(3) "215" ["name"]=> string(13) "201sannelieke" ["slug"]=> string(13) "201sannelieke" ["path"]=> string(32) "wp-content/gallery/201sannelieke" ["title"]=> string(13) "201sannelieke" ["galdesc"]=> string(0) "" ["pageid"]=> string(1) "0" ["previewpic"]=> string(5) "13264" ["author"]=> string(1) "5" ["abspath"]=> string(76) "/data/websites/www.grendelman.net/wordpress/wp-content/gallery/201sannelieke" }
 
 				$imagelist = $wpdb -> get_col ("SELECT filename, pid FROM ". $wpdb->prefix . "ngg_pictures WHERE galleryid = '$gallery->gid'");
 				$pidlist   = $wpdb -> get_col (null, 1);
@@ -1257,8 +1218,6 @@ EOT;
 
 				check_admin_referer('ngg_enhancer_copyright_form');
 
-				// array(6) { ["_wpnonce"]=> string(10) "fd69736194" ["_wp_http_referer"]=> string(76) "/wp/wp-admin/admin.php?page=nggallery-manage-gallery&mode=edit&gid=2&paged=1" ["action"]=> string(13) "set_copyright" ["TB_imagelist"]=> string(5) "2,3,4" ["TB_bulkaction"]=> string(13) "set_copyright" ["copyright"]=> string(18) "1883 hahdfhahh dfh" } 
-
 				$images = $this -> match_enhanced_table (explode (",", $_POST ["TB_imagelist"]));
 				$rangestr = "('" . implode("','", $images) . "')";
 				$sql = $wpdb -> prepare ("UPDATE ". $this -> table_name . " SET copyright=%s WHERE pid IN $rangestr", $_POST ["copyright"]);
@@ -1421,9 +1380,20 @@ EOT;
 
 				$replacements ['{lightviewoptions}'] = "";
 				if (($m = $enhancer_meta) != "") {
+					$height = $m ["height"];
+					$width = $m ["width"];
+
+					$maxheight = $this -> options ['video_max_height'];
+					if ($height > $maxheight) {
+						$width = (int) ($maxheight / $height) * $width;
+						$height = $maxheight;
+					}
+
 					$extra_h = intval ($this -> options ['video_extra_vheight']);
-					$t = "width: " . $m ["width"] .",";
-					$t .= "height: " . ($m ["height"] + $extra_h);
+					$height += $extra_h;
+
+					$t = "width: " . $width .",";
+					$t .= "height: " . $height;
 					//	",".
 					//$t .= "menubar: 'bottom'";
 					$replacements ['{lightviewoptions}'] = " :: $t";
@@ -1579,11 +1549,10 @@ EOT;
 			}
 
 			/**
-			 * Late action to run for NGG AJAX operations. It will be called for each image separately.
-			 * NOTE: This doesn't work out of the box with NextGEN Gallery 1.9.1 to 1.9.10 and maybe later.
+			 * Early action to run for NGG AJAX operations. It will be called for each image separately.
+			 * NOTE: This doesn't work out of the box with NextGEN Gallery 1.9.1.
 			 * admin/ajax.php needs a modification, please see http://code.google.com/p/nextgen-gallery/issues/detail?id=451
-			 * On line 68, the following code should be inserted:
-			 *   do_action ('ngg_ajax_final operation');
+			 * die ($result) on line 69 should be changed to echo "$result\n";
 			 */
 			function wp_ajax_ngg_ajax_operation_late ()
 			{
