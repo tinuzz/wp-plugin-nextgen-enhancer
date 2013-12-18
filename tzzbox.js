@@ -252,35 +252,45 @@ Tzzbox = {
 		if ( WB = t.I('shWaitBar') ) WB.parentNode.removeChild(WB);
 
 		S.style.width = D.style.width = '';
+		// set title width to image width - 4 px
 		T.style.width = (TI.width - 4) + 'px';
 
-		shHeight = t.wHeight - 50;
+		shHeight = t.wHeight - 50;   // max image height = window height - 50 px
 
 		if ( t.FS ) {
 			if ( TI.width > (t.wWidth - 10) )
-			S.style.width = D.style.width = TI.width + 10 + 'px';
+				S.style.width = D.style.width = TI.width + 10 + 'px';
 			document.documentElement.style.overflowX = '';
 		} else {
-			//window.scrollTo(0,t.Top);
+			// if image height is too big
 			if ( TI.height > shHeight ) {
+				// set image width proportional to max height
 				TI.width = TI.width * (shHeight / TI.height);
+				// set image height to max height
 				TI.height = shHeight;
 				resized = 1;
 			}
+			// if image width is > window width - 16 px
 			if ( TI.width > (t.wWidth - 16) ) {
+				// set image height proportional to max width
 				TI.height = TI.height * ((t.wWidth - 16) / TI.width);
+				// set image width to max width
 				TI.width = t.wWidth - 16;
 				resized = 1;
 			}
+			// set title width to image width - 4 px
 			T.style.width = (TI.width - 4) + 'px';
 		}
 
+		// Set overlay height
 		maxHeight = t.Top + TI.height + 10;
 		if ( maxHeight > t.pgHeight ) S.style.height = maxHeight + 'px';
-		//window.scrollTo(0,t.Top);
 
+		// spare height = max height - real hight; take 45%
 		itop = (shHeight - TI.height) * 0.45;
+		// mtop = itop, but at least 3
 		mtop = (itop > 3) ? Math.floor(itop) : 3;
+		// set shDisplay vertical offset to mtop, relative to scroll position (t.Top)
 		D.style.top = t.Top + mtop + 'px';
 		W.style.visibility = 'visible';
 		Tzzbox.clickhandler();
