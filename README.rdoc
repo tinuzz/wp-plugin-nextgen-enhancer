@@ -3,7 +3,7 @@
 This is a Wordpress plugin, that enhances the functionality of
 NextGEN Gallery [1], a great photo gallery plugin for Wordpress.
 
-THIS PLUGIN DOES NOT WORK WITH NEXTGEN >= 2.0 !
+THIS PLUGIN DOES NOT AND WILL NOT WORK WITH NEXTGEN >= 2.0 !
 
 And another warning up front: THIS PLUGIN IS NOT FOR EVERYBODY.
 
@@ -51,7 +51,8 @@ This plugin has the following features:
 
 * (Experimental) Tzzbox overlay effect. NextGEN Enhancer comes with its own
   Lightbox alternative. When enabled, the JavaScript Thumbnail effect setting of
-  NextGEN Gallery is overridden.
+  NextGEN Gallery is overridden. In v1.1 the custom Tzzbox effect was replaced
+  by a fork of Shutter Reloaded [8].
 
 * (Experimental) A shortcode [nggenav] for quick navigation between album pages.
 
@@ -156,17 +157,9 @@ The XML format is as follows:
 
 === Tzzbox overlay effect (experimental)
 
-NextGEN Enhancer comes with 'Tzzbox', a Lightbox-like effect, based on jQuery
-TOOLS [7] and written by the same author as NextGEN Enhancer. It was inspired
-by Lightview, but has far less features. Basically, it can only display images
-and Flash as of now, but at least support for HTML5 video is on the roadmap.
-
-The JavaScript for jQuery TOOLS 'Overlay', 'Expose' and 'Flashembed' is included
-in the library, so if you have these tools loaded by some other means in your
-Wordpress install, the tools might be loaded twice, which may cause problems.
-The only workaround at this moment, is to edit 'tzzbox.js', find the line that
-contains 'jQuery Tools v1.2.6 - The missing UI library for the Web', and delete
-everything from that line onward.
+NextGEN Enhancer comes with 'Tzzbox', a Lightbox-like effect, forked from
+Shutter Reloaded [8]. The only difference with Shutter Reloaded at this point,
+is video support using JW Player.
 
 === Album navigation shortcode (experimental)
 
@@ -213,3 +206,4 @@ negative order to move a link to the start of the list.
 [5] http://wordpress.org/extend/plugins/lightview-plus/
 [6] http://code.google.com/p/nextgen-gallery/issues/detail?id=451
 [7] http://flowplayer.org/tools/
+[8] http://www.laptoptips.ca/javascripts/shutter-reloaded/

@@ -53,6 +53,11 @@ irreversible.
 
 == Changelog ==
 
+= 1.1 - 2013-12-18 =
+
+* Replace Tzzbox with a fork of [Shutter Reloaded](http://www.laptoptips.ca/javascripts/shutter-reloaded/)
+* Implement maximum height for videos
+
 = 1.0.1 - 2012-01-25 =
 
 * Tzzbox: make '-' and '=' hide/unhide the navigation button bar
