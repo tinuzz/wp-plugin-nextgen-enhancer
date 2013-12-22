@@ -124,7 +124,7 @@ Tzzbox = {
 		var dv = t.textBtns ? ' | ' : '';
 		if ( shutterLinks[ln].num > 1 ) {
 			prev = shutterSets[shutterLinks[ln].set][shutterLinks[ln].num - 2];
-			prevlink = '<a href="#" id="prevpic" onclick="Tzzbox.make('+prev+');return false">&lt;&lt;</a>'+dv;
+			prevlink = '<a href="#" id="prevpic" onclick="Tzzbox.make('+prev+');return false"><span class="glyphicon glyphicon-circle-arrow-left"></span></a>'+dv;
 			previmg = new Image();
 			previmg.src = shutterLinks[prev].link;
 		} else {
@@ -133,7 +133,7 @@ Tzzbox = {
 
 		if ( shutterLinks[ln].num != -1 && shutterLinks[ln].num < (shutterSets[shutterLinks[ln].set].length) ) {
 			next = shutterSets[shutterLinks[ln].set][shutterLinks[ln].num];
-			nextlink = '<a href="#" id="nextpic" onclick="Tzzbox.make('+next+');return false">&gt;&gt;</a>'+dv;
+			nextlink = '<a href="#" id="nextpic" onclick="Tzzbox.make('+next+');return false"><span class="glyphicon glyphicon-circle-arrow-right"></span></a>'+dv;
 			nextimg = new Image();
 			nextimg.src = shutterLinks[next].link;
 		} else {
@@ -154,7 +154,7 @@ Tzzbox = {
 				});
 			}
 		}
-		if (typeof objOptions['width'] == 'undefined') {
+		if (typeof objOptions['width'] == 'undefined' || objOptions['width'] == 0 ) {
 			objOptions['width'] = 640;
 			objOptions['height'] = 480;
 		}
@@ -167,19 +167,11 @@ Tzzbox = {
 		if (shutterLinks[ln].linktype == 'video') {
 			D.innerHTML = '<div id="shWrap"><div id="shTopVid" style="width: ' + objOptions['width'] + 'px"><div id="videoplayer"></div></div>' + NavBar + '</div>';
 			t.I('shTopVid').onclick = function (e) { e.stopPropagation(); }
-			jwplayer("videoplayer").setup({
-				autostart: true,
-				file: shutterLinks[ln].link,
-				width: objOptions['width'],
-				height: objOptions['height']
-			});
-			t.showVid();
+			t.showVid(objOptions, ln);
 		}
 		else {
 			D.innerHTML = '<div id="shWrap"><img src="'+shutterLinks[ln].link+'" id="shTopImg" title="' + t.msgClose + ' ' + shutterLinks[ln].linktype + '" onload="Tzzbox.showImg();" />' + NavBar +'</div>';
 			t.I('shTopImg').onclick = function (e) { e.stopPropagation(); }
-			//Google Chrome 4.0.249.78 bug for onload attribute
-			document.getElementById('shTopImg').src = shutterLinks[ln].link;
 		}
 
 		document.onkeydown = function(event){Tzzbox.handleArrowKeys(event);};
@@ -296,21 +288,52 @@ Tzzbox = {
 		Tzzbox.clickhandler();
 	},
 
-	showVid : function() {
+	showVid : function(objOptions, ln) {
 		var t = this, S = t.I('shShutter'), D = t.I('shDisplay'), TI = t.I('shTopVid'), P = t.I('videoplayer'),
 			T = t.I('shTitle'), NB = t.I('shNavBar'), W, WB, wHeight, wWidth, shHeight, maxHeight, itop, mtop, resized = 0;
 
 		if ( (W = t.I('shWrap')) && W.style.visibility == 'visible' ) return;
+
+		shHeight = t.wHeight - 50;
+
+		// if image height is too big
+		if ( objOptions['height'] > shHeight ) {
+			// set image width proportional to max height
+			objOptions['width'] = objOptions['width'] * (shHeight / objOptions['height']);
+			// set image height to max height
+			objOptions['height'] = shHeight;
+			resized = 1;
+		}
+		// if image width is > window width - 16 px
+		if ( objOptions['width'] > (t.wWidth - 16) ) {
+			// set image height proportional to max width
+			objOptions['height'] = objOptions['height'] * ((t.wWidth - 16) / objOptions['width'] );
+			// set image width to max width
+			objOptions['width'] = t.wWidth - 16;
+			resized = 1;
+		}
+
+		TI.style.width = objOptions['width'] + 'px';
+
+		jwplayer("videoplayer").setup({
+			autostart: true,
+			file: shutterLinks[ln].link,
+			width: objOptions['width'],
+			height: objOptions['height']
+		});
 
 		T.style.width = (TI.offsetWidth - 24) + 'px';
 
 		maxHeight = t.Top + TI.offsetHeight + 10;
 		if ( maxHeight > t.pgHeight ) S.style.height = maxHeight + 'px';
 
-		shHeight = t.wHeight - 50;
 		itop = (shHeight - TI.offsetHeight) * 0.45;
 		mtop = (itop > 3) ? Math.floor(itop) : 3;
 		D.style.top = t.Top + mtop + 'px';
+
+		// set title width to image width - 4 px
+		T.style.width = (objOptions['width'] - 4) + 'px';
+
 		W.style.visibility = 'visible';
 		Tzzbox.clickhandler();
 	},
