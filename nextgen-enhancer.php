@@ -94,6 +94,7 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 
 				// Load nextgen-tzzbox.js
 				add_action ('wp_print_scripts', array (&$this, 'load_scripts'));
+				add_action ('wp_enqueue_scripts', array (&$this, 'load_styles'));
 
 				// Filter to set up separate image and video counters for display in album view
 				add_filter ('ngg_album_galleryobject', array (&$this, 'ngg_album_galleryobject'));
@@ -244,8 +245,21 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				if (isset ($this -> options) && $this -> options ["use_tzzbox"] == "yes") {
 					wp_enqueue_script ('nextgen-tzzbox',      plugins_url('tzzbox.js', __FILE__));
 					//wp_enqueue_script ('nextgen-tzzboxinit',  plugins_url('nextgen-tzzbox.js', __FILE__));
-					wp_enqueue_style  ('nextgen-tzzbox',      plugins_url('tzzbox.css', __FILE__));
 					wp_enqueue_script ('nextgen-jwplayer',  plugins_url('jwplayer/jwplayer.js', __FILE__));
+				}
+			}
+
+			/**
+			 * Handler for 'wp_enqueue_scripts'.
+			 * Load stylesheets.
+			 */
+			function load_styles ()
+			{
+				if (isset ($this -> options) && $this -> options ["use_tzzbox"] == "yes") {
+					wp_register_style  ('nextgen-tzzbox',   plugins_url('tzzbox.css', __FILE__));
+					wp_enqueue_style ('nextgen-tzzbox');
+					wp_register_style  ('nextgen-bs-glyph', plugins_url('bs-glyph.css', __FILE__));
+					wp_enqueue_style ('nextgen-bs-glyph');
 				}
 			}
 
