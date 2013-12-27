@@ -244,8 +244,8 @@ Tzzbox = {
 		if ( WB = t.I('shWaitBar') ) WB.parentNode.removeChild(WB);
 
 		S.style.width = D.style.width = '';
-		// set title width to image width - 4 px
-		T.style.width = (TI.width - 4) + 'px';
+		// set title width to image width
+		T.style.width = TI.width + 'px';
 
 		shHeight = t.wHeight - 50;   // max image height = window height - 50 px
 
@@ -270,8 +270,8 @@ Tzzbox = {
 				TI.width = t.wWidth - 16;
 				resized = 1;
 			}
-			// set title width to image width - 4 px
-			T.style.width = (TI.width - 4) + 'px';
+			// set title width to image width
+			T.style.width = TI.width + 'px';
 		}
 
 		// Set overlay height
@@ -331,8 +331,8 @@ Tzzbox = {
 		mtop = (itop > 3) ? Math.floor(itop) : 3;
 		D.style.top = t.Top + mtop + 'px';
 
-		// set title width to image width - 4 px
-		T.style.width = (objOptions['width'] - 4) + 'px';
+		// set title width to image width
+		T.style.width = objOptions['width'] + 'px';
 
 		W.style.visibility = 'visible';
 		Tzzbox.clickhandler();
