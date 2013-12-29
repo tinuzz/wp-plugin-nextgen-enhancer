@@ -21,7 +21,14 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 
 	// Load the ngg-db library, so we can statically call methods on it
 	$nextgen_path = plugin_dir_path(__FILE__) ."../nextgen-gallery";
-	require_once($nextgen_path . "/lib/ngg-db.php");
+	$nextgen_path2 = plugin_dir_path(__FILE__) ."../nextgen-one-reloaded";
+
+	if (file_exists ($nextgen_path2)) {
+		require_once($nextgen_path2 . "/lib/ngg-db.php");
+	}
+	else {
+		require_once($nextgen_path . "/lib/ngg-db.php");
+	}
 
 	if (!class_exists('nextgen_enhancer')) {
 		class nextgen_enhancer {
@@ -809,7 +816,8 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 			<br />
 			<hr />
 EOF;
-				if (is_plugin_active('nextgen-gallery/nggallery.php')) {
+				if (is_plugin_active('nextgen-gallery/nggallery.php') ||
+						is_plugin_active('nextgen-one-reloaded/nggallery.php')) {
 					echo "You seem to have NextGEN Gallery active. Good.<br />";
 				}
 				else {
