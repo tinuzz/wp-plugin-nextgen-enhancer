@@ -236,40 +236,44 @@ Tzzbox = {
 		t.wWidth = ( deW > 1 ) ? deW : dbW;
 	},
 
+	scale : function(h,w) {
+
+		// This function returns an array with actual width and height to use, considering
+		// the real width and height of the object and the size of the viewport
+
+		var t = this;
+		shHeight = t.wHeight - 50;   // max image height = window height - 50 px
+		shWidth  = t.wWidth - 16;    // max image width  = window width - 16 px
+		if (shHeight < h) {          // if image height is too big
+			w = w * (shHeight / h);    // set image width proportional to max height
+			h = shHeight;              // set image height to max height
+		}
+		if (shWidth < w) {           // if image width is too big
+			h = h * (shWidth / w);     // set image height proportional to max width
+			w = shWidth;               // set image width to max width
+		}
+		return { h: h, w: w };
+	},
+
 	showImg : function() {
-		var t = this, S = t.I('shShutter'), D = t.I('shDisplay'), TI = t.I('shTopImg'), T = t.I('shTitle'), NB = t.I('shNavBar'), W, WB, wHeight, wWidth, shHeight, maxHeight, itop, mtop, resized = 0;
+		var t = this, S = t.I('shShutter'), D = t.I('shDisplay'), TI = t.I('shTopImg'), T = t.I('shTitle'), NB = t.I('shNavBar'), W, WB, maxHeight, itop, mtop;
 
 		if ( ! S ) return;
 		if ( (W = t.I('shWrap')) && W.style.visibility == 'visible' ) return;
 		if ( WB = t.I('shWaitBar') ) WB.parentNode.removeChild(WB);
 
 		S.style.width = D.style.width = '';
-		// set title width to image width
-		T.style.width = TI.width + 'px';
-
-		shHeight = t.wHeight - 50;   // max image height = window height - 50 px
 
 		if ( t.FS ) {
 			if ( TI.width > (t.wWidth - 10) )
 				S.style.width = D.style.width = TI.width + 10 + 'px';
 			document.documentElement.style.overflowX = '';
 		} else {
-			// if image height is too big
-			if ( TI.height > shHeight ) {
-				// set image width proportional to max height
-				TI.width = TI.width * (shHeight / TI.height);
-				// set image height to max height
-				TI.height = shHeight;
-				resized = 1;
-			}
-			// if image width is > window width - 16 px
-			if ( TI.width > (t.wWidth - 16) ) {
-				// set image height proportional to max width
-				TI.height = TI.height * ((t.wWidth - 16) / TI.width);
-				// set image width to max width
-				TI.width = t.wWidth - 16;
-				resized = 1;
-			}
+
+			size = t.scale (TI.height, TI.width);
+			TI.height = size['h'];
+			TI.width = size['w'];
+
 			// set title width to image width
 			T.style.width = TI.width + 'px';
 		}
@@ -279,7 +283,7 @@ Tzzbox = {
 		if ( maxHeight > t.pgHeight ) S.style.height = maxHeight + 'px';
 
 		// spare height = max height - real hight; take 45%
-		itop = (shHeight - TI.height) * 0.45;
+		itop = (t.wHeight - 50 - TI.height) * 0.45;
 		// mtop = itop, but at least 3
 		mtop = (itop > 3) ? Math.floor(itop) : 3;
 		// set shDisplay vertical offset to mtop, relative to scroll position (t.Top)
@@ -290,49 +294,29 @@ Tzzbox = {
 
 	showVid : function(objOptions, ln) {
 		var t = this, S = t.I('shShutter'), D = t.I('shDisplay'), TI = t.I('shTopVid'), P = t.I('videoplayer'),
-			T = t.I('shTitle'), NB = t.I('shNavBar'), W, WB, wHeight, wWidth, shHeight, maxHeight, itop, mtop, resized = 0;
+			T = t.I('shTitle'), NB = t.I('shNavBar'), W, WB, maxHeight, itop, mtop;
 
 		if ( (W = t.I('shWrap')) && W.style.visibility == 'visible' ) return;
 
-		shHeight = t.wHeight - 50;
-
-		// if image height is too big
-		if ( objOptions['height'] > shHeight ) {
-			// set image width proportional to max height
-			objOptions['width'] = objOptions['width'] * (shHeight / objOptions['height']);
-			// set image height to max height
-			objOptions['height'] = shHeight;
-			resized = 1;
-		}
-		// if image width is > window width - 16 px
-		if ( objOptions['width'] > (t.wWidth - 16) ) {
-			// set image height proportional to max width
-			objOptions['height'] = objOptions['height'] * ((t.wWidth - 16) / objOptions['width'] );
-			// set image width to max width
-			objOptions['width'] = t.wWidth - 16;
-			resized = 1;
-		}
-
-		TI.style.width = objOptions['width'] + 'px';
+		size = t.scale (objOptions['height'], objOptions['width']);
+		TI.style.width = size['w'] + 'px';
 
 		jwplayer("videoplayer").setup({
 			autostart: true,
 			file: shutterLinks[ln].link,
-			width: objOptions['width'],
-			height: objOptions['height']
+			width: size['w'],
+			height: size['h'],
 		});
-
-		T.style.width = (TI.offsetWidth - 24) + 'px';
 
 		maxHeight = t.Top + TI.offsetHeight + 10;
 		if ( maxHeight > t.pgHeight ) S.style.height = maxHeight + 'px';
 
-		itop = (shHeight - TI.offsetHeight) * 0.45;
+		itop = ((t.wHeight - 50) - TI.offsetHeight) * 0.45;
 		mtop = (itop > 3) ? Math.floor(itop) : 3;
 		D.style.top = t.Top + mtop + 'px';
 
 		// set title width to image width
-		T.style.width = objOptions['width'] + 'px';
+		T.style.width = size['w'] + 'px';
 
 		W.style.visibility = 'visible';
 		Tzzbox.clickhandler();
