@@ -59,7 +59,7 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				"video_regexp"         => '/\.(mp4|flv)\.jpg$/i',
 				"video_player_href"    => "/lib/jwplayer/player.swf?file={fileref}&autostart=true&provider=http",
 				"video_extra_vheight"  => 0,
-				"video_max_height"     => 480,
+				"video_max_height"     => 1080,
 				"use_tzzbox"           => "",
 			);
 
@@ -1407,7 +1407,7 @@ EOT;
 					$width = $m ["width"];
 
 					$maxheight = $this -> options ['video_max_height'];
-					if ($height > $maxheight) {
+					if ($maxheight && $height > $maxheight) {
 						$width = (int) ($maxheight / $height) * $width;
 						$height = $maxheight;
 					}
