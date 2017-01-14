@@ -144,6 +144,7 @@ Tzzbox = {
 		title = shutterLinks[ln].title.split('::');
 		if (typeof title[0] != 'undefined') caption = title[0].trim();  // IE 9+, FF 3.5+
 		if (typeof title[1] != 'undefined') description = title[1].trim();
+		else description = '';
 		if (typeof title[2] != 'undefined') {
 			opts = title[2].trim();
 			if (opts.length) {
@@ -242,13 +243,13 @@ Tzzbox = {
 		// the real width and height of the object and the size of the viewport
 
 		var t = this;
-		shHeight = t.wHeight - 50;   // max image height = window height - 50 px
+		shHeight = t.wHeight - 80;   // max image height = window height - 80 px
 		shWidth  = t.wWidth - 16;    // max image width  = window width - 16 px
-		if (shHeight < h) {          // if image height is too big
+		if (shHeight < h) {                // if image height is too big
 			w = w * (shHeight / h);    // set image width proportional to max height
 			h = shHeight;              // set image height to max height
 		}
-		if (shWidth < w) {           // if image width is too big
+		if (shWidth < w) {                 // if image width is too big
 			h = h * (shWidth / w);     // set image height proportional to max width
 			w = shWidth;               // set image width to max width
 		}
@@ -256,13 +257,15 @@ Tzzbox = {
 	},
 
 	showImg : function() {
-		var t = this, S = t.I('shShutter'), D = t.I('shDisplay'), TI = t.I('shTopImg'), T = t.I('shTitle'), NB = t.I('shNavBar'), W, WB, maxHeight, itop, mtop;
+		var t = this, S = t.I('shShutter'), D = t.I('shDisplay'), TI = t.I('shTopImg'), T = t.I('shTitle'), NB = t.I('shNavBar'), W, WB, wHeight, wWidth, shHeight, maxHeight, itop, mtop;
 
 		if ( ! S ) return;
 		if ( (W = t.I('shWrap')) && W.style.visibility == 'visible' ) return;
 		if ( WB = t.I('shWaitBar') ) WB.parentNode.removeChild(WB);
 
 		S.style.width = D.style.width = '';
+
+		shHeight = t.wHeight - 80;   // max image height = window height - 80 px
 
 		if ( t.FS ) {
 			if ( TI.width > (t.wWidth - 10) )
@@ -283,7 +286,7 @@ Tzzbox = {
 		if ( maxHeight > t.pgHeight ) S.style.height = maxHeight + 'px';
 
 		// spare height = max height - real hight; take 45%
-		itop = (t.wHeight - 50 - TI.height) * 0.45;
+		itop = (shHeight - TI.height) * 0.45;
 		// mtop = itop, but at least 3
 		mtop = (itop > 3) ? Math.floor(itop) : 3;
 		// set shDisplay vertical offset to mtop, relative to scroll position (t.Top)
@@ -294,7 +297,7 @@ Tzzbox = {
 
 	showVid : function(objOptions, ln) {
 		var t = this, S = t.I('shShutter'), D = t.I('shDisplay'), TI = t.I('shTopVid'), P = t.I('videoplayer'),
-			T = t.I('shTitle'), NB = t.I('shNavBar'), W, WB, maxHeight, itop, mtop;
+			T = t.I('shTitle'), NB = t.I('shNavBar'), W, WB, wHeight, wWidth, shHeight, maxHeight, itop, mtop, V = t.I('video_1');
 
 		if ( (W = t.I('shWrap')) && W.style.visibility == 'visible' ) return;
 
@@ -368,7 +371,9 @@ Tzzbox = {
 				if (nextlink) nextlink.onclick();
 				break;
 			case 27:
-				if (closelink) closelink.onclick();
+				if (closelink) {
+					Tzzbox.hideShutter();
+				}
 				else if (closevid) {
 					Tzzbox.hideShutter();
 				}
