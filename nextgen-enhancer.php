@@ -1339,7 +1339,7 @@ EOT;
 				$is_video = false;
 				$meta = unserialize ($row ["meta_data"]);
 				$enhancer_meta = unserialize ($row ["metadata"]);
-				list ($gurl, $gpsc) = $this -> getmapurl($meta, '<img src="/images/map.gif" style="vertical-align: baseline" />');
+				list ($gurl, $gpsc) = $this -> getmapurl($meta, '<img src="'.plugins_url('pin.png', __FILE__).'" style="vertical-align: middle" />');
 				$gallery = nggdb::find_gallery ($row['galleryid']);
 
 				if (substr ($row ['filename'], -8) == ".mp4.jpg" ||
