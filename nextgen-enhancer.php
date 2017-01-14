@@ -1458,7 +1458,7 @@ EOT;
 					if ($latref == "S") $lat = -$lat;
 					if ($lonref == "W") $lon = -$lon;
 
-					$gurl = "http://maps.google.nl/maps?f=q&hl=en&geocode=&ie=UTF8&t=h&z=15&q=";
+					$gurl = "http://maps.google.nl/maps?f=q&hl=en&geocode=&ie=UTF8&z=15&q=";
 					$gurl .= "$lat+$lon";
 				}
 
