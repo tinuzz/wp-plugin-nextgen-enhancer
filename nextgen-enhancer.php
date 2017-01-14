@@ -1601,11 +1601,16 @@ EOT;
 				global $post;
 
 				$atts = shortcode_atts (array (
-						'scope' => 'siblings'
+						'scope' => 'siblings',
+						'limit' => 0
 					), $atts);
 
 				if ($atts ['scope'] == 'children') {
 					$parent = $post -> ID;
+				}
+				elseif ( $atts['scope'] == 'parent' ) {
+					$parent_post = get_post( $post -> post_parent );
+					$parent = $parent_post -> post_parent;
 				}
 				else {
 					$parent = $post -> post_parent;
@@ -1623,9 +1628,17 @@ EOT;
 				$rewrite_pattern = '/Photos? (.*)/';
 				$rewrite_replace = '\\1';
 				$links = array();
+				$i = 0;
 				foreach ($pages as $p) {
 					$links[] = "<a href = \"" . get_page_link ($p -> ID) ."\">".
 						ucfirst (preg_replace ($rewrite_pattern, $rewrite_replace, $p -> post_title)). "</a>";
+					$i++;
+					if ( (int) $atts['limit'] > 0 && $i >= (int) $atts['limit'] ) {
+						if ($i < count( $pages ) ) {
+							$links[] = '...';
+						}
+						break;
+					}
 				}
 				return implode(' | ', $links);
 			}
