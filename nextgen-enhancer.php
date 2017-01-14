@@ -5,12 +5,13 @@ Plugin Name: NextGEN Enhancer
 Plugin Script: nextgen-enhancer.php
 Plugin URI: https://www.grendelman.net/wp/nextgen-enhancer/
 Description: NextGEN Gallery Enhancer
-Version: 1.1
+Version: 1.2
 Author: Martijn Grendelman
 Author URI: http://www.grendelman.net/
 Template by: http://web.forret.com/tools/wp-plugin.asp
 
 === RELEASE NOTES ===
+2017-01-15 - v1.2 - replace JW Player with VideoJS, and bugfixes
 2013-12-18 - v1.1 - replace tzzbox with shutter-reloaded based code
 2011-02-18 - v1.0 - first version
 */

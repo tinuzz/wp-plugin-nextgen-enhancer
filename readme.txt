@@ -1,9 +1,9 @@
 === NextGEN Enhancer ===
 Contributors: tinuzz
 Donate link: https://www.grendelman.net/wp/nextgen-enhancer/
-Tags: nextgen, gallery, enhance, photo, video, flash, images, jwplayer, flowplayer
+Tags: nextgen, gallery, enhance, photo, video, flash, images, videojs
 Requires at least: 3.3
-Tested up to: 3.3.1
+Tested up to: 4.7.1
 Stable tag: trunk
 
 This plugins enhances the functionality of NextGEN Gallery version 1.9.0 or higher.
@@ -52,6 +52,21 @@ irreversible.
 == Screenshots ==
 
 == Changelog ==
+
+= 1.2 - 2017-01-15 =
+
+The first release in more than 3 years. I still use this plugin, and occasionally, I
+fix things in it, usually because something has stopped working on my website. It
+appears that quite some changes have accumulated over time, so I decided to make a
+release. Changes are:
+
+* Replace JW Player with [VideoJS](http://videojs.com/)
+* Make 'nggenav' shortcode work on gallery pages, using 'scope=parent' as parameter
+* Add 'limit=X' parameter to 'nggenav' shortcode, to limit the number of links
+* Don't link to satellite view on Google maps
+* Fix a bug where nggdb() code was called as a class method, causing problems in PHP7
+* Suplly a pin icon for map links
+* Some TzzBox / Shutter improvements
 
 = 1.1 - 2013-12-18 =
 
