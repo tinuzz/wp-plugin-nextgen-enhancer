@@ -166,7 +166,7 @@ Tzzbox = {
 			'<span class="shCaption">' + caption + '</span><br />' + description + '</div>' + imgNum + '</div>';
 
 		if (shutterLinks[ln].linktype == 'video') {
-			D.innerHTML = '<div id="shWrap"><div id="shTopVid" style="width: ' + objOptions['width'] + 'px"><div id="videoplayer"></div></div>' + NavBar + '</div>';
+			D.innerHTML = '<div id="shWrap"><div id="shTopVid" style="width: ' + objOptions['width'] + 'px"><div id="videoplayer"><video id="video_1" class="video-js vjs-default-skin vjs-big-play-centered" autoplay controls preload="auto" data-setup="" width="' + objOptions['width'] + '"><source src="' + shutterLinks[ln].link + '" type="video/mp4" /></video></div></div>' + NavBar + '</div>';
 			t.I('shTopVid').onclick = function (e) { e.stopPropagation(); }
 			t.showVid(objOptions, ln);
 		}
@@ -303,13 +303,6 @@ Tzzbox = {
 
 		size = t.scale (objOptions['height'], objOptions['width']);
 		TI.style.width = size['w'] + 'px';
-
-		jwplayer("videoplayer").setup({
-			autostart: true,
-			file: shutterLinks[ln].link,
-			width: size['w'],
-			height: size['h'],
-		});
 
 		maxHeight = t.Top + TI.offsetHeight + 10;
 		if ( maxHeight > t.pgHeight ) S.style.height = maxHeight + 'px';

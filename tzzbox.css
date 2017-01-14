@@ -118,3 +118,8 @@ div#shDisplay div#shName a, div#shDisplay div#shName a:hover {
 .shCaption {
 	font-weight: bold;
 }
+
+video {
+  width: 100%    !important;
+  height: auto   !important;
+}

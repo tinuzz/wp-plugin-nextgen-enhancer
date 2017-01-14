@@ -252,7 +252,8 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				if (isset ($this -> options) && $this -> options ["use_tzzbox"] == "yes") {
 					wp_enqueue_script ('nextgen-tzzbox',      plugins_url('tzzbox.js', __FILE__));
 					//wp_enqueue_script ('nextgen-tzzboxinit',  plugins_url('nextgen-tzzbox.js', __FILE__));
-					wp_enqueue_script ('nextgen-jwplayer',  plugins_url('jwplayer/jwplayer.js', __FILE__));
+					//wp_enqueue_script ('nextgen-jwplayer',  plugins_url('jwplayer/jwplayer.js', __FILE__));
+					wp_enqueue_script ('nextgen-videojs',  plugins_url('videojs/video.js', __FILE__));
 				}
 			}
 
@@ -268,6 +269,8 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 					wp_register_style  ('nextgen-bs-glyph', plugins_url('bs-glyph.css', __FILE__));
 					wp_enqueue_style ('nextgen-bs-glyph');
 				}
+				wp_register_style  ('nextgen-videojs',   plugins_url('videojs/video-js.css', __FILE__));
+				wp_enqueue_style ('nextgen-videojs');
 			}
 
 			/**
