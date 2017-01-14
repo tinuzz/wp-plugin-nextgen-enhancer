@@ -727,7 +727,8 @@ Template by: http://web.forret.com/tools/wp-plugin.asp
 				$start = ( $_GET['paged'] - 1 ) * 100;
 
 				// get picture values
-				$picturelist = nggdb::get_gallery($act_gid, $this -> ngg_options['galSort'], $this -> ngg_options['galSortDir'], false, 100, $start );
+				$nggdb = new nggdb();
+				$picturelist = $nggdb->get_gallery($act_gid, $this -> ngg_options['galSort'], $this -> ngg_options['galSortDir'], false, 100, $start );
 
 				$ids = array_keys ($picturelist);
 				$rangestr = "('" . implode("','", $ids) . "')";
