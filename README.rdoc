@@ -1,4 +1,4 @@
-= Deprecation notice =
+= Deprecation notice
 
 THIS PLUGIN IS DEPRECATED AND THE CODE IS NOT MAINTAINED.
 
