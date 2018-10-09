@@ -1,3 +1,9 @@
+= Deprecation notice =
+
+THIS PLUGIN IS DEPRECATED AND THE CODE IS NOT MAINTAINED.
+
+Please do not use this.
+
 = NextGEN Enhancer Wordpress Plugin
 
 This is a Wordpress plugin, that enhances the functionality of
